@@ -1,0 +1,50 @@
+
+ALGORITHM: KDTransfer
+
+ALGO_TYPE: distill
+BATCH_SIZE: 128
+DATA_URL: ''
+DATASET_NAME: CIFAR10 # incase of autogptq ["wikitext2", "c4", "c4-new", "ptb", "ptb-new"]
+MODEL: deit_small_patch16_224
+NUM_CLASSES: 10
+PIN_MEM: false
+PRETRAINED: false
+CACHE_PATH: 'ABC/.cache'
+JOB_ID: 1
+JOB_PATH: 'ABC/jobs/1'
+DATA_PATH: 'ABC/datasets/1'
+PLATFORM: timm
+TASK: image_classification
+WORKERS: 0
+insize: 224
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+prune: #default args for pruning methods
+TRAINING: True
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "Adam"
+SCHEDULER: "MultiStepLR"
+LEARNING_RATE: 0.001
+FINETUNE_EPOCHS: 1
+VALIDATE: True
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'ABC'
+LOGGING_PATH: 'ABC/logs' 
+CUSTOM_MODEL_PATH: 'ABC/models'
+MODEL_PATH: 'ABC/jobs/1'
+distill:    
+    KDTransfer:
+        requires_cuda_transfer: True
+        TEACHER_MODEL: vgg16
+         #hyperparameters for distillation process
+        LAMBDA : 0.5 #balance between cross-entropy and KLDiv
+        TEMPERATURE : 20 #temperature for softmax
+        DISTILL_SEED : 43
+        DISTILL_EPOCHS : 20 #total number of epochs
+        DISTILL_LR : 0.01 #learning rate
+        DISTILL_WEIGHT_DECAY : 0.0005 #weight decay
+
+#Supported Platforms: Timm,TorchVision
+# Tested Models: Deit,Vit Swin, ConvNext, Resnet, DenseNet, VGG, Mobilenet all models all teacher, student combinations

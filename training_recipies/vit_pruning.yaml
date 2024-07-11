@@ -1,0 +1,47 @@
+ALGORITHM: TorchPrune
+ALGO_TYPE: prune
+BATCH_SIZE: 32
+DATA_URL: ''
+DATASET_NAME: CIFAR10 
+MODEL: vit_small_patch16_224
+NUM_CLASSES: 10
+CACHE_PATH: 'ABC/.cache'
+JOB_ID: 1
+JOB_PATH: 'ABC/jobs/1'
+DATA_PATH: 'ABC/datasets/1'
+LOGGING_PATH: 'ABC/logs' 
+MODEL_PATH: 'ABC/models'
+PIN_MEM: false
+PRETRAINED: false
+PLATFORM: timm
+TASK: image_classification
+WORKERS: 0
+insize: 224
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+TRAINING: True
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "Adam"
+LEARNING_RATE: 0.001
+FINETUNE_EPOCHS: 0
+VALIDATE: True
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'ABC'
+prune:
+  TorchPrune:
+      GROUP_IMPORTANCE: GroupTaylorImportance
+      PRUNER_NAME: MetaPruner
+      SPARSITY: 0.5
+      LOSS_FN: CrossEntropyLoss
+      BOTTLENECK: False
+      OPTIMIZER_NAME: Adam
+      EPOCHS: 10
+      ITERATIVE: False
+      MAX_DROP: 0.2
+      TARGET_PRUNE_RATE: 0.5
+      ITERATIVE_STEPS: 16
+      PRUNE_NUM_HEADS: False
+
+      

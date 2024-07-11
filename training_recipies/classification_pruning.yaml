@@ -1,0 +1,49 @@
+ALGORITHM: TorchPrune
+ALGO_TYPE: prune
+BATCH_SIZE: 512
+DATA_URL: ''
+DATASET_NAME: CIFAR10
+MODEL: resnet50
+NUM_CLASSES: 10
+CACHE_PATH: 'ABC/.cache'
+JOB_ID: 1
+JOB_PATH: 'ABC/jobs/1'
+DATA_PATH: 'ABC/datasets/1'
+PIN_MEM: false
+PRETRAINED: false
+PLATFORM: torchvision
+TASK: image_classification
+WORKERS: 0
+insize: 32
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+TRAINING: True
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "Adam"
+LEARNING_RATE: 0.001
+FINETUNE_EPOCHS: 1
+VALIDATE: True
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'ABC'
+LOGGING_PATH: 'ABC/logs' 
+CUSTOM_MODEL_PATH: 'ABC/models'
+MODEL_PATH: 'ABC/jobs/1'
+
+prune: #default args for pruning methods
+
+  TorchPrune:
+      GROUP_IMPORTANCE: GroupNormImportance
+      PRUNER_NAME: GroupNormPruner
+      SPARSITY: 0.5
+      LOSS_FN: CrossEntropyLoss
+      BOTTLENECK: False
+      OPTIMIZER_NAME: Adam
+      EPOCHS: 10
+      ITERATIVE: False
+      MAX_DROP: 0.2
+      TARGET_PRUNE_RATE: 0.5
+      ITERATIVE_STEPS: 16
+      
+

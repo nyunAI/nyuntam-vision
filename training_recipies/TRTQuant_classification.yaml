@@ -1,0 +1,37 @@
+ALGORITHM: TensorRT
+ALGO_TYPE: quant
+BATCH_SIZE: 1
+DATA_URL: ''
+DATASET_NAME: CIFAR10 # incase of autogptq ["wikitext2", "c4", "c4-new", "ptb", "ptb-new"]
+MODEL: resnet50
+NUM_CLASSES: 10
+CACHE_PATH: 'ABC/.cache'
+JOB_ID: 1
+JOB_PATH: 'ABC/jobs/1'
+DATA_PATH: 'ABC/datasets/1'
+LOGGING_PATH: 'ABC/logs' 
+MODEL_PATH: 'ABC/models'
+PIN_MEM: False
+PRETRAINED: False
+PLATFORM: torchvision
+TASK: image_classification
+WORKERS: 0
+insize: 32
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+TRAINING: True
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "Adam"
+LEARNING_RATE: 0.001
+FINETUNE_EPOCHS: 0
+VALIDATE: True
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'ABC'
+quant:
+    TensorRT:
+      # VERSION: "tensorrt"
+      onnx_file_path: "onnx_models/trt_trial.onnx"
+      tensorrt_file_path: "tensorrt_models/trt_trial.trt"
+
