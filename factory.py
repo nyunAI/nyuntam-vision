@@ -1,3 +1,8 @@
+
+# nyuntam
+from algorithm import Algorithm
+from factory import Factory as BaseFactory, FactoryTypes
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -12,11 +17,13 @@ from trailmet.utils.benchmark import ModelBenchmark
 
 
 
-class CompressionFactory:
+class CompressionFactory(BaseFactory):
     """
     Factory to productionize all algorithms defined in trailmet.
     Algorithm specific compression pipeline, arguments and setup can be defined in this class.
     """
+
+    _type: FactoryTypes = FactoryTypes.VISION
 
     def collate_fn_obj(self, batch):
         images, targets = zip(*batch)
@@ -24,17 +31,18 @@ class CompressionFactory:
         # targets = torch.stack(targets,0)
 
         return tuple([images, targets])
+    
+    def get_algorithm(self, name: str) -> Algorithm:
+        algo_type = self.kwargs.get("ALGO_TYPE", "prune")
+        module = importlib.import_module(f"algorithms_kompress.{algo_type}")
+        loaded_algorithm = getattr(module, "initialize_initialization")(name)
+        return loaded_algorithm
 
     def __init__(self, **kwargs):
         self.kwargs = kwargs
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
-
-        module = importlib.import_module(f"algorithms_kompress.{algo_type}")
-
-        
-        init_algo = getattr(module, "initialize_initialization")
-        loaded_algorithm = init_algo(algorithm)
+        loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():
             if type(kwargs[k]) != type({}):
@@ -94,18 +102,18 @@ class CompressionFactory:
                     )
         self.dataloader_dict = dataloader_dict
         if algo_type == "distill":
-            self.compressor = loaded_algorithm(
+            self.algorithm = loaded_algorithm(
                 model, student_model, dataloader_dict, **(self.kw)
             )
         elif algorithm in []:
-            self.compressor = loaded_algorithm(**(self.kw))
+            self.algorithm = loaded_algorithm(**(self.kw))
         else:
-            self.compressor = loaded_algorithm(
+            self.algorithm = loaded_algorithm(
                 model, dataloader_dict, **(self.kw))
-        self.compressor.log_name = self.kw.get("log_name")
+        self.algorithm.log_name = self.kw.get("log_name")
 
     def __call__(self):
-        model2, self.name = self.compressor.compress_model()
+        model2, self.name = self.algorithm.compress_model()
         if self.kwargs['BENCHMARK'] == True:
             self.benchmark_classification(model2)
         return
