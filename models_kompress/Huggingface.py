@@ -1,9 +1,8 @@
 from transformers import AutoModelForImageClassification, AutoModelForCausalLM
-import torch.nn as nn
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join("..", "utils")))
-from utils import modify_head_classification
+from algorithms_kompress.utils import modify_head_classification
 
 def get_hf_model(model_name, num_classes, cache_dir, task="image_classification"):
     if task == "image_classification":
