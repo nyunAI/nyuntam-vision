@@ -6,9 +6,9 @@ from factory import Factory as BaseFactory, FactoryTypes
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from data import prepare_data
-from model import create_model
-from finetune import validate
+from core.data import prepare_data
+from core.model import create_model
+from core.finetune import validate
 import copy
 import torch
 import importlib
@@ -34,7 +34,7 @@ class CompressionFactory(BaseFactory):
     
     def get_algorithm(self, name: str) -> Algorithm:
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
-        module = importlib.import_module(f"algorithms_kompress.{algo_type}")
+        module = importlib.import_module(f"{algo_type}")
         loaded_algorithm = getattr(module, "initialize_initialization")(name)
         return loaded_algorithm
 
