@@ -1,3 +1,2 @@
-from .FXQuant import FXQuant
-from .EXQuant import EXQuant
-__all__ = ['FXQuant','EXQuant']
+from .main import FXQuant
+__all__ = ['FXQuant']

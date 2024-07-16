@@ -5,11 +5,8 @@ import os
 import sys
 from nncf import NNCFConfig
 from nncf.torch import create_compressed_model, register_default_init_args
-sys.path.append(os.path.abspath(os.path.join("..", "logging_kompress")))
-from logging_kompress import define_logger
+sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train
-
-sys.path.append(os.path.abspath(os.path.join("..", "finetune")))
 
 class NNCFQAT:
     def __init__(self, model, loaders=None, **kwargs):
@@ -31,9 +28,7 @@ class NNCFQAT:
         self.model_path = kwargs.get("MODEL_PATH", "models")
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
 
-        self.logger= define_logger(
-            __name__, self.logging_path
-        )
+        self.logger= logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
         self.job_id = kwargs.get("JOB_ID","1")
         if self.wandb:

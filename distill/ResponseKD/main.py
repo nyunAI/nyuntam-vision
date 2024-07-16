@@ -5,10 +5,9 @@ from .distill import Distillation
 from .losses import KDTransferLoss
 import os
 import sys
-
-sys.path.append(os.path.abspath(os.path.join("..", "logging_kompress")))
-from logging_kompress import define_logger
+import logging
 from datetime import datetime
+sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train, validate
 from tqdm import tqdm
 import wandb
@@ -56,9 +55,7 @@ class KDTransfer(Distillation):
         self.model_path = kwargs.get("MODEL_PATH", "models")
         self.logging_path = kwargs.get("LOGGING_PATH", "logs") 
         self.job_id = kwargs.get("JOB_ID","1")
-        self.logger = define_logger(
-            __name__, self.logging_path
-        )
+        self.logger = logging.getLogger(__name__)
         self.save = self.model_path
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
 

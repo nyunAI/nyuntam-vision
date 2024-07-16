@@ -5,11 +5,10 @@ import os
 import uuid
 import sys
 import shutil
-sys.path.append(os.path.abspath(os.path.join("..", "logging_kompress")))
-from logging_kompress import define_logger
+sys.path.append(os.path.abspath(os.path.join("...", "core")))
 import torch
 from core.finetune import train
-
+import logging
 
 class NNCF:
     def __init__(self, model, loaders=None, **kwargs):
@@ -27,9 +26,7 @@ class NNCF:
             self.model_type = None
         self.model_path = kwargs.get("MODEL_PATH", "models")
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
-        self.logger= define_logger(
-            __name__, self.logging_path
-        )
+        self.logger= logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
         self.job_id = kwargs.get("JOB_ID","1")
         if self.wandb:

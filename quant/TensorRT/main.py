@@ -2,9 +2,9 @@ import subprocess
 import wandb
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join("..", "logging_kompress")))
-from logging_kompress import define_logger
 import torch
+import logging
+sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train
 
 
@@ -21,9 +21,7 @@ class TensorRT:
         self.to_train = kwargs.get("TRAINING", True)
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
         self.framework = kwargs["PLATFORM"]
-        self.logger = define_logger(
-            __name__, self.logging_path
-        )
+        self.logger = logging.getLogger(__name__)
         self.onnx_file_path = f"{self.model_path}/intermediate_onnx.onnx"
         self.trt_file_path = f"{self.model_path}/mds.trt"
         self.logger.info(f"Experiment Arguments: {self.kwargs}")

@@ -1,4 +1,4 @@
-from models import ModelsFactory
+from .models import ModelsFactory
 import os
 
 def create_model(model_name, path, **kw):

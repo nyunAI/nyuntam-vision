@@ -7,18 +7,13 @@ import wandb
 from datetime import datetime
 import logging
 import sys
-
-sys.path.append(os.path.abspath(os.path.join("..", "logging_kompress")))
-from logging_kompress import define_logger
 import time
 import timm
 from transformers.models.vit.modeling_vit import ViTSelfAttention, ViTSelfOutput
 from .torchprune_utils import replace_c2f_with_c2f_v2, train_v2, forward_timm_vit
 from copy import deepcopy
 from trailmet.utils import AverageMeter, accuracy
-
-sys.path.append(os.path.abspath(os.path.join("..", "finetune")))
-logger = logging.getLogger(__name__)
+sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train
 
 
@@ -58,9 +53,7 @@ class TorchPrune:
         self.model_path = kwargs.get("MODEL_PATH", "models")
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
 
-        self.logger = define_logger(
-            __name__, self.logging_path
-        )
+        self.logger = logging.getLogger(__name__)
 
         try:
             eval(f"tp.importance.{self.imp_name}")

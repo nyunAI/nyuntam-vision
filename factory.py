@@ -6,9 +6,9 @@ from factory import Factory as BaseFactory, FactoryTypes
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from core.data import prepare_data
-from core.model import create_model
-from core.finetune import validate
+from .core.data import prepare_data
+from .core.model import create_model
+from .core.finetune import validate
 import copy
 import torch
 import importlib
@@ -42,6 +42,14 @@ class CompressionFactory(BaseFactory):
         self.kwargs = kwargs
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
+
+        #Creating Directories
+        os.makedirs(self.kwargs.get("CACHE_PATH"),exist_ok =True)
+        os.makedirs(self.kwargs.get("MODEL_PATH"),exist_ok=True)
+        os.makedirs(self.kwargs.get("JOB_PATH"),exist_ok=True)
+        os.makedirs(self.kwargs.get("DATA_PATH"),exist_ok=True)
+        os.makedirs(self.kwargs.get("LOGGING_PATH"),exist_ok=True)
+
         loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():

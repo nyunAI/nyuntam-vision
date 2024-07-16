@@ -1,9 +1,7 @@
 from torchvision.datasets.utils import download_and_extract_archive
 from torchvision.datasets import ImageFolder
 from torchvision import transforms
-from datasets import (
-    ClassificationDatasetFactory,
-)
+from .datasets import ClassificationDatasetFactory
 import os
 def prepare_data(dataset_name: str, url: str, to_path: str, **kwargs):
     """Prepare provided data link for model training/compression.

@@ -1,8 +1,5 @@
 import os
-from .cifar import CIFAR10Dataset, CIFAR100Dataset
-from .imagenet import ImageNetDataset
-from .chest import ChestDataset
-from .tcga import TCGADataset
+from .cifar import CIFAR10Dataset
 from .custom import CustomDataset
 
 class ClassificationDatasetFactory(object):

@@ -2,9 +2,8 @@
 import wandb
 import os
 import sys
-
-sys.path.append(os.path.abspath(os.path.join("..", "logging_kompress")))
-from logging_kompress import define_logger
+sys.path.append(os.path.abspath(os.path.join("...", "core")))
+import logging
 import numpy as np
 from onnxruntime.quantization import (
     quantize_static,
@@ -14,7 +13,6 @@ import torch
 import onnx
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join("..", "finetune")))
 from core.finetune import train
 
 class ONNXQuant:
@@ -35,9 +33,7 @@ class ONNXQuant:
         self.model_path = kwargs.get("MODEL_PATH", "models")
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
         self.num_samples = kwargs.get("NUM_SAMPLES",10)
-        self.logger = define_logger(
-            __name__, self.logging_path
-        )
+        self.logger = logging.getLogger(__name__)
         self.onnx_file_path = f"{self.model_path}/ori.onnx"
         self.onnx_quantized_file_path = f"{self.model_path}/mds.onnx"
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
