@@ -39,6 +39,8 @@ class CompressionFactory(BaseFactory):
         return loaded_algorithm
 
     def __init__(self, kwargs):
+        super().__init__(kwargs)
+        
         self.kwargs = kwargs
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
@@ -49,7 +51,7 @@ class CompressionFactory(BaseFactory):
         os.makedirs(self.kwargs.get("JOB_PATH"),exist_ok=True)
         os.makedirs(self.kwargs.get("DATA_PATH"),exist_ok=True)
         os.makedirs(self.kwargs.get("LOGGING_PATH"),exist_ok=True)
-
+        self.set_logger(logging_path = self.kwargs.get("LOGGING_PATH"))
         loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():
