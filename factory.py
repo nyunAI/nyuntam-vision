@@ -1,4 +1,3 @@
-
 # nyuntam
 from algorithm import Algorithm
 from factory import Factory as BaseFactory, FactoryTypes
@@ -16,7 +15,6 @@ import os
 from trailmet.utils.benchmark import ModelBenchmark
 
 
-
 class CompressionFactory(BaseFactory):
     """
     Factory to productionize all algorithms defined in trailmet.
@@ -31,7 +29,7 @@ class CompressionFactory(BaseFactory):
         # targets = torch.stack(targets,0)
 
         return tuple([images, targets])
-    
+
     def get_algorithm(self, name: str) -> Algorithm:
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         module = importlib.import_module(f"{algo_type}")
@@ -40,18 +38,18 @@ class CompressionFactory(BaseFactory):
 
     def __init__(self, kwargs):
         super().__init__(kwargs)
-        
+
         self.kwargs = kwargs
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
 
-        #Creating Directories
-        os.makedirs(self.kwargs.get("CACHE_PATH"),exist_ok =True)
-        os.makedirs(self.kwargs.get("MODEL_PATH"),exist_ok=True)
-        os.makedirs(self.kwargs.get("JOB_PATH"),exist_ok=True)
-        os.makedirs(self.kwargs.get("DATA_PATH"),exist_ok=True)
-        os.makedirs(self.kwargs.get("LOGGING_PATH"),exist_ok=True)
-        self.set_logger(logging_path = self.kwargs.get("LOGGING_PATH"))
+        # Creating Directories
+        os.makedirs(self.kwargs.get("CACHE_PATH"), exist_ok=True)
+        os.makedirs(self.kwargs.get("MODEL_PATH"), exist_ok=True)
+        os.makedirs(self.kwargs.get("JOB_PATH"), exist_ok=True)
+        os.makedirs(self.kwargs.get("DATA_PATH"), exist_ok=True)
+        os.makedirs(self.kwargs.get("LOGGING_PATH"), exist_ok=True)
+        self.set_logger(logging_path=self.kwargs.get("LOGGING_PATH"))
         loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():
@@ -59,7 +57,7 @@ class CompressionFactory(BaseFactory):
                 kw.update({k: kwargs[k]})
         kw.update(kwargs[algo_type][algorithm])
         self.kw = kw
-        self.kw['IS_TEACHER'] = False
+        self.kw["IS_TEACHER"] = False
         task = self.kw.get("TASK", "image_classification")
         model_name = self.kw.get("MODEL", "resnet50")
 
@@ -67,24 +65,25 @@ class CompressionFactory(BaseFactory):
             self.kw.get("DATASET_NAME", "cifar10"),
             self.kw.get("DATA_URL"),
             self.kw.get("DATA_PATH"),
-            **self.kw
+            **self.kw,
         )
 
         model = None
         if algo_type == "distill":
             st_name = self.kw.get("MODEL", "resnet18")
-            teach_name = self.kw.get("TEACHER_MODEL","")
+            teach_name = self.kw.get("TEACHER_MODEL", "")
             student_kw = copy.deepcopy(self.kw)
-            student_kw['IS_TEACHER'] = False
+            student_kw["IS_TEACHER"] = False
             student_model = create_model(
                 st_name, self.kw.get("STUDENT_MODEL_PATH", ""), **student_kw
             )
             if self.kw.get("requires_cuda_transfer", False):
                 student_model = student_model.cuda()
             teacher_kw = copy.deepcopy(self.kw)
-            teacher_kw['IS_TEACHER'] = True
-            model = create_model(teach_name, self.kw.get(
-                "TEACHER_MODEL", ""), **teacher_kw)
+            teacher_kw["IS_TEACHER"] = True
+            model = create_model(
+                teach_name, self.kw.get("TEACHER_MODEL", ""), **teacher_kw
+            )
 
         elif algorithm not in []:
             if os.path.exists(model_name):
@@ -104,12 +103,12 @@ class CompressionFactory(BaseFactory):
             for split in dataset_dict:
                 shuffle = True if split == "train" else False
                 dataloader_dict[split] = DataLoader(
-                        dataset_dict[split],
-                        batch_size=self.kw.get("BATCH_SIZE"),
-                        shuffle=shuffle,
-                        num_workers=self.kw.get("WORKERS", 0),
-                        pin_memory=self.kw.get("PIN_MEM", False),
-                    )
+                    dataset_dict[split],
+                    batch_size=self.kw.get("BATCH_SIZE"),
+                    shuffle=shuffle,
+                    num_workers=self.kw.get("WORKERS", 0),
+                    pin_memory=self.kw.get("PIN_MEM", False),
+                )
         self.dataloader_dict = dataloader_dict
         if algo_type == "distill":
             self.algorithm = loaded_algorithm(
@@ -118,13 +117,12 @@ class CompressionFactory(BaseFactory):
         elif algorithm in []:
             self.algorithm = loaded_algorithm(**(self.kw))
         else:
-            self.algorithm = loaded_algorithm(
-                model, dataloader_dict, **(self.kw))
+            self.algorithm = loaded_algorithm(model, dataloader_dict, **(self.kw))
         self.algorithm.log_name = self.kw.get("log_name")
 
     def __call__(self):
         model2, self.name = self.algorithm.compress_model()
-        if self.kwargs['BENCHMARK'] == True:
+        if self.kwargs["BENCHMARK"] == True:
             self.benchmark_classification(model2)
         return
 

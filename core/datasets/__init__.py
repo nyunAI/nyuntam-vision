@@ -2,6 +2,7 @@ import os
 from .cifar import CIFAR10Dataset
 from .custom import CustomDataset
 
+
 class ClassificationDatasetFactory(object):
     """This class forms the generic wrapper for the different dataset classes.
 
@@ -20,14 +21,14 @@ class ClassificationDatasetFactory(object):
         Return:
             dataset(tuple): dataset
         """
-        assert 'name' in kwargs, 'should provide dataset name'
-        name = kwargs['name']
-        assert 'root' in kwargs, 'should provide dataset root'
-        if 'CIFAR10' == name:
+        assert "name" in kwargs, "should provide dataset name"
+        name = kwargs["name"]
+        assert "root" in kwargs, "should provide dataset root"
+        if "CIFAR10" == name:
             obj_dfactory = CIFAR10Dataset(**kwargs)
         else:
             obj_dfactory = CustomDataset(**kwargs)
-            #raise Exception(f"unknown dataset{kwargs['name']}")
+            # raise Exception(f"unknown dataset{kwargs['name']}")
         dataset = obj_dfactory.stack_dataset()
         dataset = obj_dfactory.build_dict_info()
 

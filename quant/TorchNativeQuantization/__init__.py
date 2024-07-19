@@ -1,2 +1,3 @@
 from .main import FXQuant
-__all__ = ['FXQuant']
+
+__all__ = ["FXQuant"]

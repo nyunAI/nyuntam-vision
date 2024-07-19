@@ -13,6 +13,7 @@ from transformers.models.vit.modeling_vit import ViTSelfAttention, ViTSelfOutput
 from .torchprune_utils import replace_c2f_with_c2f_v2, train_v2, forward_timm_vit
 from copy import deepcopy
 from trailmet.utils import AverageMeter, accuracy
+
 sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train
 
@@ -83,10 +84,11 @@ class TorchPrune:
             )
 
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
-        self.job_id = kwargs.get("JOB_ID","1")
+        self.job_id = kwargs.get("JOB_ID", "1")
         if self.wandb:
             wandb.init(project="Kompress TorchPrune", name=str(self.job_id))
             wandb.config.update(self.kwargs)
+
     def init_pruner(self):
         self.init_ignore_layers()
         if "vit" in self.model_name:
@@ -221,7 +223,9 @@ class TorchPrune:
             op = torch.nn.functional.one_hot(
                 self.example_outputs, num_classes=self.classes
             )
-            loss = self.loss_fn(op.float().to(self.device), outputs.float().to(self.device))
+            loss = self.loss_fn(
+                op.float().to(self.device), outputs.float().to(self.device)
+            )
             loss.backward()
 
         self.pruner.step()

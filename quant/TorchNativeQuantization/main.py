@@ -10,6 +10,7 @@ import os
 import logging
 from tqdm import tqdm
 import sys
+
 sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train
 
@@ -28,10 +29,10 @@ class FXQuant:
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
         self.logger = logging.getLogger(__name__)
         self.quantized_model_path = f"{self.model_path}/mds.pt"
-        
+
         self.kwargs = kwargs
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
-        self.job_id = kwargs.get("JOB_ID","1")
+        self.job_id = kwargs.get("JOB_ID", "1")
         if self.wandb:
             wandb.init(project="Kompress FXQuant", name=str(self.job_id))
             wandb.config.update(self.kwargs)
@@ -148,7 +149,7 @@ class FXQuant:
         return model_fused
 
     def compress_model(self):
-        x,y = next(iter(self.loaders['train']))
+        x, y = next(iter(self.loaders["train"]))
         if self.to_train:
             self.model, _, _ = train(
                 self.loaders["train"],
@@ -169,6 +170,6 @@ class FXQuant:
         else:
             raise Exception("Wrong Choice Valid Choices = weight,satic,fusion")
             return
-        
+
         torch.save(qm, self.quantized_model_path)
         return qm, __name__

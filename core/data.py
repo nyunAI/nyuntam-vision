@@ -3,6 +3,8 @@ from torchvision.datasets import ImageFolder
 from torchvision import transforms
 from .datasets import ClassificationDatasetFactory
 import os
+
+
 def prepare_data(dataset_name: str, url: str, to_path: str, **kwargs):
     """Prepare provided data link for model training/compression.
     The file type and possible file compression is automatically detected from the provided file link.
@@ -30,7 +32,7 @@ def prepare_data(dataset_name: str, url: str, to_path: str, **kwargs):
     Returns:
         datasets (tuple) : A tuple of train, val and test pytorch Datasets
     """
-    insize = kwargs.get('insize',32)
+    insize = kwargs.get("insize", 32)
     if url:
         download_and_extract_archive(url, to_path)
         normalize = transforms.Normalize(
@@ -66,7 +68,5 @@ def prepare_data(dataset_name: str, url: str, to_path: str, **kwargs):
                 target_transform=target_transforms,
             )
         else:
-            raise Exception(
-                f"Unknown Task {task}. Known Tasks =[image_classification]"
-            )
+            raise Exception(f"Unknown Task {task}. Known Tasks =[image_classification]")
     return dataset_dict

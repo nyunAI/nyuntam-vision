@@ -7,6 +7,7 @@ import os
 import sys
 import logging
 from datetime import datetime
+
 sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train, validate
 from tqdm import tqdm
@@ -53,8 +54,8 @@ class KDTransfer(Distillation):
         self.dataset_name = dataloaders["train"].dataset.__class__.__name__
         self.folder_name = kwargs.get("USER_FOLDER", "abc")
         self.model_path = kwargs.get("MODEL_PATH", "models")
-        self.logging_path = kwargs.get("LOGGING_PATH", "logs") 
-        self.job_id = kwargs.get("JOB_ID","1")
+        self.logging_path = kwargs.get("LOGGING_PATH", "logs")
+        self.job_id = kwargs.get("JOB_ID", "1")
         self.logger = logging.getLogger(__name__)
         self.save = self.model_path
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
@@ -63,13 +64,14 @@ class KDTransfer(Distillation):
             wandb.init(project="Kompress Response_KD", name=str(self.job_id))
             wandb.config.update(self.kwargs)
         self.distill_args = {
-            "TEMPRATURE":self.temperature,
-            "EPOCHS":self.epochs,
+            "TEMPRATURE": self.temperature,
+            "EPOCHS": self.epochs,
             "LR": self.lr,
             "LAMBDA": self.lambda_,
             "WEIGHT_DECAY": kwargs.get("DISTILL_WEIGHT_DECAY"),
-            "seed": kwargs.get("DISTILL_SEED")
+            "seed": kwargs.get("DISTILL_SEED"),
         }
+
     def compress_model(self):
         """Function to transfer knowledge from teacher to student."""
         # include teacher training options
@@ -79,12 +81,12 @@ class KDTransfer(Distillation):
             self.dataloaders,
             **self.distill_args,
         )
-        
+
         return "None", __name__
 
     def distill(self, teacher_model, student_model, dataloaders, **kwargs):
         self.logger.info("=====> TRAINING STUDENT NETWORK <=====")
-        train_teacher =kwargs.get("TRAINING",True)
+        train_teacher = kwargs.get("TRAINING", True)
         opt = self.kwargs.get("OPTIMIZER", "Adam")
         lr = kwargs.get("LR", 0.1)
         weight_decay = kwargs.get("WEIGHT_DECAY", 0.0005)
@@ -104,8 +106,8 @@ class KDTransfer(Distillation):
 
         criterion = self.criterion
         best_top1_acc = 0
-        
-        if train_teacher ==True:
+
+        if train_teacher == True:
             self.kwargs["VALIDATE"] = True
             self.kwargs["SAVE_MODEL"] = True
             self.kwargs["SAVE_PATH"] = self.save
@@ -137,14 +139,11 @@ class KDTransfer(Distillation):
 
             if valid_top1_acc > best_top1_acc:
                 best_top1_acc = valid_top1_acc
-                torch.save(
-                    self.student_model, os.path.join(self.save, "mds.pt")
-                )
+                torch.save(self.student_model, os.path.join(self.save, "mds.pt"))
 
             if self.wandb_monitor:
                 wandb.log({"best_top1_acc": best_top1_acc})
 
-        
     def train_one_epoch(
         self, teacher_model, student_model, dataloader, loss_fn, optimizer, epoch
     ):

@@ -4,6 +4,7 @@ import os
 import sys
 import torch
 import logging
+
 sys.path.append(os.path.abspath(os.path.join("...", "core")))
 from core.finetune import train
 
@@ -25,17 +26,18 @@ class TensorRT:
         self.onnx_file_path = f"{self.model_path}/intermediate_onnx.onnx"
         self.trt_file_path = f"{self.model_path}/mds.trt"
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
-        self.job_id = kwargs.get("JOB_ID","1")
+        self.job_id = kwargs.get("JOB_ID", "1")
         if self.wandb:
             wandb.init(project="Kompress TensorRT", name=str(self.job_id))
             wandb.config.update(self.kwargs)
+
     def convert_to_onnx(self):
         rand_inp = torch.randn(self.batch_size, 3, self.imsize, self.imsize)
         torch.onnx.export(
-                self.model.to(self.device), rand_inp.to(self.device), self.onnx_file_path
-            )
+            self.model.to(self.device), rand_inp.to(self.device), self.onnx_file_path
+        )
         return "SUCCESS"
-    
+
     def convert_tensorrt(self):
         subprocess.run(
             f"trtexec --onnx={self.onnx_file_path} --saveEngine={self.trt_file_path} --int8",
@@ -47,13 +49,13 @@ class TensorRT:
 
     def compress_model(self):
         if self.to_train:
-                self.model, _, _ = train(
-                    self.loaders["train"],
-                    self.loaders["test"],
-                    self.model,
-                    __name__,
-                    self.kwargs,
-                )
+            self.model, _, _ = train(
+                self.loaders["train"],
+                self.loaders["test"],
+                self.model,
+                __name__,
+                self.kwargs,
+            )
         self.model = self.model.to("cpu")
         self.convert_to_onnx()
         self.convert_tensorrt()

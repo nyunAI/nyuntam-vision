@@ -22,7 +22,6 @@ def initialize_args(model, kwargs):
     qat_step = kwargs.get("QAT_STEP", False)
     compression_scheduler = kwargs.get("QAT_SCHEDULER", False)
 
-
     return (
         criterion,
         device,
@@ -104,10 +103,12 @@ def train(train_loader, val_loader, model, name, args):
     model.train()
     best_acc = 0
     for epoch in range(epochs):
-        if qat_step == True: compression_scheduler.scheduler.epoch_step()
+        if qat_step == True:
+            compression_scheduler.scheduler.epoch_step()
         end = time.time()
         for i, (images, target) in enumerate(train_loader):
-            if qat_step == True: compression_scheduler.scheduler.step()
+            if qat_step == True:
+                compression_scheduler.scheduler.step()
             # compute output
             optimizer.zero_grad()
             output = model(images.to(device))
@@ -115,9 +116,9 @@ def train(train_loader, val_loader, model, name, args):
                 if "logits" in dir(output):
                     output = output.logits
             loss = criterion(output, target.to(device))
-            if qat_step == True: 
+            if qat_step == True:
                 compression_loss = compression_scheduler.loss()
-                loss+=compression_loss
+                loss += compression_loss
             loss.backward()
             optimizer.step()
             # measure accuracy and record loss

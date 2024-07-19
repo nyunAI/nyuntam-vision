@@ -69,7 +69,7 @@ class Custom(Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self._image_paths = glob.glob(f"{root}/{self._mode}/*/*")
-        
+
         self._label_names = [
             l.split("/")[-1] for l in glob.glob(f"{root}/{self._mode}/*")
         ]
@@ -90,14 +90,13 @@ class Custom(Dataset):
     def __getitem__(self, idx):
         image = Image.open(self._image_paths[idx]).convert("RGB")
 
-    
         if self.transform != None:
-                image = self.transform(image)
-        
+            image = self.transform(image)
+
         label = torch.tensor([self._labels[idx]]).float()
 
         if self._mode == "train" or self._mode == "val" or self._mode == "test":
-            
+
             return [torch.tensor(image), label]
         else:
             raise Exception("Unknown mode : {}".format(self._mode))
@@ -143,7 +142,7 @@ class CustomDataset(BaseDataset):
     ):
         super(CustomDataset, self).__init__(
             name=name,
-            root=os.path.join(root,"root"),
+            root=os.path.join(root, "root"),
             transform=transform,
             target_transform=target_transform,
             download=download,
@@ -168,6 +167,7 @@ class CustomDataset(BaseDataset):
                 target_transform=self.target_transform[item],
             )
             self.dataset_dict[dataset_type] = data
+
     def build_dict_info(self):
         """
         Behavior:

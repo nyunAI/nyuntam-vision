@@ -5,10 +5,12 @@ import os
 import uuid
 import sys
 import shutil
+
 sys.path.append(os.path.abspath(os.path.join("...", "core")))
 import torch
 from core.finetune import train
 import logging
+
 
 class NNCF:
     def __init__(self, model, loaders=None, **kwargs):
@@ -19,16 +21,16 @@ class NNCF:
         self.imsize = kwargs.get("insize", "32")
         self.transformer = kwargs.get("TRANSFORMER", False)
         self.to_train = kwargs.get("TRAINING", True)
-        self.model_path = kwargs.get("MODEL_PATH","")
+        self.model_path = kwargs.get("MODEL_PATH", "")
         if self.transformer:
             self.model_type = nncf.parameters.ModelType.TRANSFORMER
         else:
             self.model_type = None
         self.model_path = kwargs.get("MODEL_PATH", "models")
         self.logging_path = kwargs.get("LOGGING_PATH", "logs")
-        self.logger= logging.getLogger(__name__)
+        self.logger = logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
-        self.job_id = kwargs.get("JOB_ID","1")
+        self.job_id = kwargs.get("JOB_ID", "1")
         if self.wandb:
             wandb.init(project="Kompress NNCF", name=str(self.job_id))
             wandb.config.update(self.kwargs)
@@ -48,8 +50,12 @@ class NNCF:
         os.makedirs(f"{self.model_path}/onnx_temp_models", exist_ok=True)
         onnx_model_path = f"{self.model_path}/onnx_temp_models/{str(uuid.uuid4())}"
         onnx_model_path_ori = f"{self.model_path}/onnx_temp_models/{str(uuid.uuid4())}"
-        torch.onnx.export(quantized_model.to("cpu"), input_fp32.to("cpu"), onnx_model_path)
-        torch.onnx.export(self.model.to("cpu"), input_fp32.to("cpu"), onnx_model_path_ori)
+        torch.onnx.export(
+            quantized_model.to("cpu"), input_fp32.to("cpu"), onnx_model_path
+        )
+        torch.onnx.export(
+            self.model.to("cpu"), input_fp32.to("cpu"), onnx_model_path_ori
+        )
         ov_quantized_model = ov.convert_model(onnx_model_path)
         ov.serialize(
             ov_quantized_model,
@@ -59,7 +65,7 @@ class NNCF:
         return ov_quantized_model
 
     def compress_model(self):
-        
+
         if self.to_train:
             self.model, _, _ = train(
                 self.loaders["train"],
