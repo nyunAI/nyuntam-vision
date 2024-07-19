@@ -38,7 +38,7 @@ class CompressionFactory(BaseFactory):
         loaded_algorithm = getattr(module, "initialize_initialization")(name)
         return loaded_algorithm
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
         self.kwargs = kwargs
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
