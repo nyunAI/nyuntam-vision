@@ -114,11 +114,8 @@ This method requires creating a virtual environment and installing the requireme
 
 
 ## DEV GUIDE
-### (How to Add New Algorithms
+-  [How to Add New Algorithms](development-guide/algorithm.md)
+-  [How to add New Dataset Formats](development-guide/datasetformat.md)
 
-### How to Add New Models
 
-### How to Add New Dataset
-
-### Documentation link
-[nyun docs](https://github.com/nyun-docs)
+For complete documentation of Nyuntam-Vision visit [nyun docs](https://github.com/nyun-docs).
