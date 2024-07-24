@@ -1,6 +1,6 @@
 from transformers import AutoModelForImageClassification, AutoModelForCausalLM
 import os
-from HeadModification import modify_head_classification
+from .headmodification import modify_head_classification
 
 
 def get_hf_model(model_name, num_classes, cache_dir, task="image_classification"):

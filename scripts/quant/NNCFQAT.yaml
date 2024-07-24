@@ -1,15 +1,13 @@
 ALGORITHM: NNCFQAT
 ALGO_TYPE: quant
 BATCH_SIZE: 256
-DATA_URL: ''
-DATASET_NAME: CIFAR10 # incase of autogptq ["wikitext2", "c4", "c4-new", "ptb", "ptb-new"]
+DATASET_NAME: CIFAR10
 MODEL: resnet50
 NUM_CLASSES: 10
 CACHE_PATH: 'abc/.cache'
 JOB_ID: 1
 JOB_PATH: 'abc/jobs/1'
 DATA_PATH: 'abc/datasets/1'
-PIN_MEM: false
 PRETRAINED: false
 PLATFORM: timm
 TASK: image_classification
@@ -26,7 +24,6 @@ LEARNING_RATE: 0.001
 FINETUNE_EPOCHS: 1
 VALIDATE: True
 VALIDATION_INTERVAL: 1
-USER_FOLDER: 'abc'
 LOGGING_PATH: 'abc/logs' 
 MODEL_PATH: 'abc/models'
 

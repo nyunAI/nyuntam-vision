@@ -1,6 +1,6 @@
 def initialize_initialization(algoname):
     if algoname == "KDTransfer":
-        from .ResponseKD import Distillation
+        from .responsekd import Distillation
         from .losses import KDTransferLoss, RkdDistance, RKdAngle
         from .response_kd import KDTransfer
 
@@ -9,7 +9,7 @@ def initialize_initialization(algoname):
 
 def initialize_initialization(algoname):
     if algoname == "KDTransfer":
-        from .ResponseKD import (
+        from .responsekd import (
             Distillation,
             KDTransferLoss,
             RkdDistance,

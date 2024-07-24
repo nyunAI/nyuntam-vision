@@ -35,7 +35,7 @@ class ModelsFactory(object):
             and os.listdir(custom_model_path) != []
             and "wds.pt" in os.listdir(custom_model_path)
         ):
-            from .WeightLoading import load_model_or_weights
+            from .weightloading import load_model_or_weights
 
             model_or_weight, flag = load_model_or_weights(
                 os.path.join(custom_model_path, "wds.pt")
@@ -46,7 +46,7 @@ class ModelsFactory(object):
                 weight = model_or_weight
         if model == None:
             if platform == "huggingface":
-                from .Huggingface import get_hf_model, get_hf_tokenizer
+                from .huggingface import get_hf_model, get_hf_tokenizer
 
                 model = get_hf_model(
                     name, num_classes, kwargs["CACHE_PATH"], task=kwargs["TASK"]
@@ -63,7 +63,7 @@ class ModelsFactory(object):
                 from .custom_timm_models import register_custom_timm_models
 
                 register_custom_timm_models()
-                from .Timm import get_timm_model
+                from .timm import get_timm_model
 
                 model = get_timm_model(name, num_classes, pretrained)
             else:

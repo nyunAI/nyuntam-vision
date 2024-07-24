@@ -18,10 +18,6 @@ class Distillation(BaseAlgorithm):
 
         pass
 
-
-# https://github.com/yoshitomo-matsubara/torchdistill/blob/8be107e00d6a481711e513f45824ecfaa8249c77/torchdistill/common/module_util.py
-
-
 def check_if_wrapped(model):
     return isinstance(model, (DataParallel, DistributedDataParallel))
 
@@ -45,8 +41,7 @@ def get_module(root_module, module_path):
                                 module_name, module_path, type(root_module).__name__
                             )
                         )
-                        # logger.info('`{}` of `{}` could not be reached in `{}`'.format(module_name, module_path,
-                        #                                                                type(root_module).__name__))
+
                 else:
                     module = getattr(module, module_name)
             elif (
@@ -60,15 +55,11 @@ def get_module(root_module, module_path):
                         module_name, module_path, type(root_module).__name__
                     )
                 )
-                # logger.info('`{}` of `{}` could not be reached in `{}`'.format(module_name, module_path,
-                #                                                                type(root_module).__name__))
+
                 return None
         else:
             module = getattr(module, module_name)
     return module
-
-
-# https://github.com/yoshitomo-matsubara/torchdistill/blob/main/torchdistill/core/forward_hook.py
 
 
 def get_device_index(data):
@@ -145,25 +136,6 @@ def register_forward_hook_with_dict(
 
 
 class ForwardHookManager(object):
-    """
-    Example::
-        >>> import torch
-        >>> from torchvision import models
-        >>> from torchdistill.core.forward_hook import ForwardHookManager
-        >>> device = torch.device('cpu')
-        >>> forward_hook_manager = ForwardHookManager(device)
-        >>> model = models.resnet18()
-        >>> forward_hook_manager.add_hook(model, 'layer2')
-        >>> x = torch.rand(16, 3, 224, 224)
-        >>> y = model(x)
-        >>> io_dict = forward_hook_manager.pop_io_dict()
-        >>> layer2_input_tensor = io_dict['layer2']['input']
-        >>> layer2_output_tensor = io_dict['layer2']['output']
-    Parameters
-    ----------
-        target_device (str): Target device
-    """
-
     def __init__(self, target_device):
         self.target_device = (
             torch.device(target_device)

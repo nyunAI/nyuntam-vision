@@ -1,13 +1,10 @@
 
 ALGORITHM: KDTransfer
-
 ALGO_TYPE: distill
 BATCH_SIZE: 128
-DATA_URL: ''
-DATASET_NAME: CIFAR10 # incase of autogptq ["wikitext2", "c4", "c4-new", "ptb", "ptb-new"]
+DATASET_NAME: CIFAR10
 MODEL: deit_small_patch16_224
 NUM_CLASSES: 10
-PIN_MEM: false
 PRETRAINED: false
 CACHE_PATH: 'ABC/.cache'
 JOB_ID: 1
@@ -30,7 +27,6 @@ LEARNING_RATE: 0.001
 FINETUNE_EPOCHS: 1
 VALIDATE: True
 VALIDATION_INTERVAL: 1
-USER_FOLDER: 'ABC'
 LOGGING_PATH: 'ABC/logs' 
 CUSTOM_MODEL_PATH: 'ABC/models'
 MODEL_PATH: 'ABC/jobs/1'
@@ -46,5 +42,3 @@ distill:
         DISTILL_LR : 0.01 #learning rate
         DISTILL_WEIGHT_DECAY : 0.0005 #weight decay
 
-#Supported Platforms: Timm,TorchVision
-# Tested Models: Deit,Vit Swin, ConvNext, Resnet, DenseNet, VGG, Mobilenet all models all teacher, student combinations
