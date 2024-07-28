@@ -1,3 +1,27 @@
+#!/usr/bin/env python
+
+# MIT License
+#
+# Copyright (c) 2023 Transmute AI Lab
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# importing the required packages
 import sys
 import torchvision
 from .dataset import BaseDataset
@@ -5,6 +29,17 @@ from .dataset import BaseDataset
 
 class CIFAR10Dataset(BaseDataset):
     """
+    `CIFAR10 <https://www.cs.toronto.edu/~kriz/cifar.html>`_ Dataset.
+    The CIFAR-10 dataset consists of 60000 32x32 colour images
+    in 10 classes, with 6000 images per class. There are 50000
+    training images and 10000 test images.The classes are completely
+    mutually exclusive.
+
+    References
+    ----------
+    Learning Multiple Layers of Features from Tiny Images,
+    Alex Krizhevsky, 2008.
+
     Parameters
     ----------
         name (string): dataset name 'CIFAR10', 'CIFAR100', default=None.

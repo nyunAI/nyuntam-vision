@@ -1,7 +1,6 @@
 # nyuntam
-from algorithm import Algorithm
-from factory import Factory as BaseFactory, FactoryTypes
-
+from nyuntam.algorithm import Algorithm
+from nyuntam.factory import Factory as BaseFactory, FactoryTypes
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -32,14 +31,14 @@ class CompressionFactory(BaseFactory):
 
     def get_algorithm(self, name: str) -> Algorithm:
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
-        module = importlib.import_module(f"{algo_type}")
+        module = importlib.import_module(f"vision.{algo_type}")
         loaded_algorithm = getattr(module, "initialize_initialization")(name)
         return loaded_algorithm
 
     def __init__(self, kwargs):
+        self.kwargs = kwargs
         super().__init__(kwargs)
 
-        self.kwargs = kwargs
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
 
@@ -49,7 +48,7 @@ class CompressionFactory(BaseFactory):
         os.makedirs(self.kwargs.get("JOB_PATH"), exist_ok=True)
         os.makedirs(self.kwargs.get("DATA_PATH"), exist_ok=True)
         os.makedirs(self.kwargs.get("LOGGING_PATH"), exist_ok=True)
-        self.set_logger(logging_path=self.kwargs.get("LOGGING_PATH"))
+        self.set_logger(self.kwargs.get("LOGGING_PATH"))
         loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():

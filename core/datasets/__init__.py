@@ -1,35 +1,35 @@
-import os
-from .cifar import CIFAR10Dataset
-from .custom import CustomDataset
+from typing import Any
 
 
-class ClassificationDatasetFactory(object):
-    """This class forms the generic wrapper for the different dataset classes.
+def __getattr__(name: str) -> Any:
+    # classification
+    if name == "ClassificationDatasetFactory":
+        from .classification import DatasetFactory as ClassificationDatasetFactory
 
-    The module includes utilities to load datasets, including methods to load
-    and fetch popular reference datasets.
-    """
+        return ClassificationDatasetFactory
 
-    @staticmethod
-    def create_dataset(**kwargs):
-        """
-        Args:
-            name(string): dataset name 'CIFAR10', 'CIFAR100', 'ImageNet', 'CHEST',
-            root(string):  Root directory of dataset where directory
-                   cifar-10-batches-py exists or will be saved
-                   to if download is set to True.
-        Return:
-            dataset(tuple): dataset
-        """
-        assert "name" in kwargs, "should provide dataset name"
-        name = kwargs["name"]
-        assert "root" in kwargs, "should provide dataset root"
-        if "CIFAR10" == name:
-            obj_dfactory = CIFAR10Dataset(**kwargs)
-        else:
-            obj_dfactory = CustomDataset(**kwargs)
-            # raise Exception(f"unknown dataset{kwargs['name']}")
-        dataset = obj_dfactory.stack_dataset()
-        dataset = obj_dfactory.build_dict_info()
+    # object detection
+    elif name == "ObjectDetectionDatasetFactory":
+        from .object_detection import DatasetFactory as ObjectDetectionDatasetFactory
 
-        return dataset
+        return ObjectDetectionDatasetFactory
+
+    # segmentation
+    elif name == "SegmentationDatasetFactory":
+        from .segmentation import DatasetFactory as SegmentationDatasetFactory
+
+        return SegmentationDatasetFactory
+
+    # tracking (commented out in original)
+    # elif name == "TrackingDatasetFactory":
+    #     from trailmet.datasets.tracking import DatasetFactory as TrackingDatasetFactory
+    #     return TrackingDatasetFactory
+
+    # pose estimation
+    elif name == "PoseEstimationDatasetFactory":
+        from .pose_estimation import DatasetFactory as PoseEstimationDatasetFactory
+
+        return PoseEstimationDatasetFactory
+
+    else:
+        raise AttributeError(f"module {__name__} has no attribute {name}")
