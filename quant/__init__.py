@@ -1,12 +1,16 @@
-def initialize_initialization(algoname):
+def initialize_initialization(algoname, task):
     if algoname == "FXQuant":
         from .torch import FXQuant
 
         return FXQuant
     elif algoname == "NNCF":
-        from .nncf import NNCF
+        if task == "image_classification":
+            from .nncf import NNCFClassifcation
+            return NNCFClassifcation
+        elif task == "object_detection":
+            from .nncf import NNCFObjectDetection
+            return NNCFObjectDetection
 
-        return NNCF
     elif algoname == "TensorRT":
         from .tensorrt import TensorRT
 
