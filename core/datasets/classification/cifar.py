@@ -5,6 +5,17 @@ from .dataset import BaseDataset
 
 class CIFAR10Dataset(BaseDataset):
     """
+    `CIFAR10 <https://www.cs.toronto.edu/~kriz/cifar.html>`_ Dataset.
+    The CIFAR-10 dataset consists of 60000 32x32 colour images
+    in 10 classes, with 6000 images per class. There are 50000
+    training images and 10000 test images.The classes are completely
+    mutually exclusive.
+
+    References
+    ----------
+    Learning Multiple Layers of Features from Tiny Images,
+    Alex Krizhevsky, 2008.
+
     Parameters
     ----------
         name (string): dataset name 'CIFAR10', 'CIFAR100', default=None.
