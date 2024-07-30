@@ -11,6 +11,4 @@ def create_model(model_name, path, **kw):
         platform=kw.get("PLATFORM", "torchvision"),
         **kw
     )
-    if kw.get("TASK") == "llm":
-        model.save_pretrained(path)
     return model
