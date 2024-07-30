@@ -3,3 +3,5 @@ def initialize_initialization(algoname):
         from .torchprune import TorchPrune
 
         return TorchPrune
+    elif algoname == "MMRazorPrune":
+        from .mmrazorprune import MMRazorPrune
