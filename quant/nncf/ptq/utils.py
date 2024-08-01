@@ -1,6 +1,3 @@
-from vision.core.utils.mmutils import find_folder_mmdet, find_folder_mmyolo
-
-
 def write_deploy_cfg(
     insize,
     score_threshold,
@@ -124,7 +121,7 @@ custom_hooks = []
 
 
 def build_mmdeploy_config(insize):
-    config = f"""_base_ = ['mmdeploy/configs/mmdet/_base_/base_dynamic.py', 'mmdeploy/configs/_base_/backends/openvino.py']
+    config = f"""_base_ = ['vision/core/utils/mmdeployconfigs/mmdet/_base_/base_dynamic.py', 'vision/core/utils/mmdeployconfigs/_base_/backends/openvino.py']
 
 onnx_config = dict(input_shape=None)
 

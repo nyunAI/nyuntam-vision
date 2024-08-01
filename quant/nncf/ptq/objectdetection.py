@@ -5,7 +5,6 @@ from .main import NNCF
 from vision.core.utils.mmutils import customize_config, create_input_image
 from .utils import write_deploy_cfg, build_quantization_config, build_mmdeploy_config
 
-
 class NNCFObjectDetection(NNCF):
     def __init__(self, model, loaders=None, **kwargs):
         super().__init__(model, loaders, **kwargs)
@@ -72,9 +71,9 @@ class NNCFObjectDetection(NNCF):
         build_mmdeploy_config(self.imsize)
         create_input_image(self.loaders["test"])
         os.system(
-            f"python mmdeploy/tools/deploy.py current_openvino_deploy_config.py current_quant_config.py {self.quantized_pth_location} demo_image.png"
+            f"python vision/core/utils/mmrazordeploy.py current_openvino_deploy_config.py current_quant_config.py {self.quantized_pth_location} demo_image.png"
         )
         self.logger.info("Deployment Successful")
-        shutil.move("/workspace/end2end.xml", os.path.join(self.model_path, "mds.xml"))
-        shutil.move("/workspace/end2end.bin", os.path.join(self.model_path, "mds.bin"))
+        shutil.move("/workspace/nyuntam/end2end.xml", os.path.join(self.model_path, "mds.xml"))
+        shutil.move("/workspace/nyuntam/end2end.bin", os.path.join(self.model_path, "mds.bin"))
         return runner.model, __name__
