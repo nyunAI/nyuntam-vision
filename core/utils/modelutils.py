@@ -119,23 +119,14 @@ def modify_head_classification(model, model_name, num_classes):
     return model
 
 
-def find_state_or_model(loaded):
+def get_state_dict_or_model(loaded):
     """
-    Identifies if loaded model is a state dict or a nn.module
+    Identifies if loaded file is a state dict or a nn.module
     """
-    if isinstance(loaded, OrderedDict) or isinstance(loaded, dict):
+    if isinstance(loaded, OrderedDict, dict):
         return "STATE_DICT"
-    else:
+    elif isinstance(loaded, nn.Module): ## add imports
         return "MODEL"
-
-
-def load_model_or_weights(path):
-    "Loads the custom model / weights from the provided path"
-    loaded = torch.load(path)
-    if find_state_or_model(loaded) == "MODEL":
-        return loaded, 1
-    else:
-        return loaded, 0
 
 def init_annfile(cfg,data_path):
         if "ann_file" in [i for i in cfg['test_evaluator'].keys()]:

@@ -141,28 +141,6 @@ class ModelsFactory(object):
                         model = get_mobilenet_bireal(num_classes, num_fp=num_fp)
                     else:
                         raise Exception("unknown model {}".format(name))
-                elif name in [
-                    "yolov8n",
-                    "yolov8s",
-                    "yolov8m",
-                    "yolov8l",
-                    "yolov8x",
-                    "yolov8n-seg",
-                    "yolov8s-seg",
-                    "yolov8m-seg",
-                    "yolov8l-seg",
-                    "yolov8x-seg",
-                ]:
-                    from .ultralytics import get_YOLOV8
-
-                    model = get_YOLOV8(name, pretrained)
-                elif name in [
-                    "rtdetr-l",
-                    "rtdetr-x",
-                ]:
-                    from .ultralytics import get_RTDETR
-
-                    model = get_RTDETR(name, pretrained, kwargs["CACHE_PATH"])
                 elif platform == "mmdet":
                     from .mmdet import get_mmdet_model
 

@@ -1,8 +1,7 @@
-from .vanillanet import VanillaNet
-from timm.models.registry import register_model
-
-
 def register_custom_timm_models():
+    from .vanillanet import VanillaNet
+    from timm.models.registry import register_model
+
     @register_model
     def vanillanet_5(pretrained=False, in_22k=False, **kwargs):
         model = VanillaNet(
