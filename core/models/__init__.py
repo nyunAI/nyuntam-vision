@@ -60,9 +60,6 @@ class ModelsFactory(object):
                         task=kwargs["TASK"],
                     )
             elif platform == "timm":
-                from .custom_models import register_custom_timm_models
-
-                register_custom_timm_models()
                 from .timm import get_timm_model
 
                 model = get_timm_model(name, num_classes, pretrained)
