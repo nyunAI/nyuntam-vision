@@ -35,7 +35,7 @@ class ModelsFactory(object):
             and os.listdir(custom_model_path) != []
             and "wds.pt" in os.listdir(custom_model_path)
         ):
-            from .utils import load_model_or_weights
+            from vision.core.utils.modelutils import load_model_or_weights
 
             model_or_weight, flag = load_model_or_weights(
                 os.path.join(custom_model_path, "wds.pt")
@@ -60,7 +60,7 @@ class ModelsFactory(object):
                         task=kwargs["TASK"],
                     )
             elif platform == "timm":
-                from .custom_timm_models import register_custom_timm_models
+                from .custom_models import register_custom_timm_models
 
                 register_custom_timm_models()
                 from .timm import get_timm_model

@@ -4,7 +4,7 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.join("..", "utils")))
-from .utils import modify_head_classification
+from vision.core.utils.modelutils import modify_head_classification
 
 
 def get_timm_model(model_name, num_classes, pretrained):
