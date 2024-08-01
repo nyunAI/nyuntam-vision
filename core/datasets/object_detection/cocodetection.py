@@ -68,8 +68,6 @@ class CocoDetectionDataset(BaseDataset):
             random_seed=random_seed,
         )
 
-        ## To do: check val_frac is float, else raise error
-        ## To do: if shuffle is true, there should be 'val' in train test split
         self.custom_root = os.path.join(self.root, "root")
         dataset = torchvision.datasets.CocoDetection
         if (
@@ -117,8 +115,6 @@ class CocoDetectionDataset(BaseDataset):
                 ]
             ):
                 self.download_mscoco(self.custom_root)
-            else:
-                pass
         else:
             raise Exception("Not Proper Format Provided for dataset")
 

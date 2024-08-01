@@ -32,7 +32,7 @@ class DatasetFactory(object):
         elif "CUSTOMVOCDETECTION" == name:
             obj_dfactory = VOCDetectionDataset(download=False, **kwargs)
         else:
-            raise Exception(f"unknown dataset{kwargs['name']}")
+            raise Exception(f"Unknown dataset{ kwargs['name']}")
 
         dataset = obj_dfactory.stack_dataset()
         dataset = obj_dfactory.build_dict_info()

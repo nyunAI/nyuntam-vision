@@ -20,11 +20,6 @@ def __getattr__(name: str) -> Any:
 
         return SegmentationDatasetFactory
 
-    # tracking (commented out in original)
-    # elif name == "TrackingDatasetFactory":
-    #     from trailmet.datasets.tracking import DatasetFactory as TrackingDatasetFactory
-    #     return TrackingDatasetFactory
-
     # pose estimation
     elif name == "PoseEstimationDatasetFactory":
         from .pose_estimation import DatasetFactory as PoseEstimationDatasetFactory

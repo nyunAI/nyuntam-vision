@@ -65,8 +65,6 @@ class CocoPoseEstimationDataset(BaseDataset):
             random_seed=random_seed,
         )
 
-        ## To do: check val_frac is float, else raise error
-        ## To do: if shuffle is true, there should be 'val' in train test split
         dataset = torchvision.datasets.CocoDetection
         if (
             not all(

@@ -72,7 +72,7 @@ class BaseDataset:
             # ensure that val exists in split_types
             assert (
                 "val" in self.split_types
-            ), "Required param val missing in the defined split types (split_type)"
+            ), f"Required param val missing in the defined split types (split_type)"
 
     def stack_dataset(self):
         """
