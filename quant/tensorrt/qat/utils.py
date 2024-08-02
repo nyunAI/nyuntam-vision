@@ -67,7 +67,7 @@ def write_deploy_cfg(
         'mmdet.models.detectors.single_stage_instance_seg.SingleStageInstanceSegmentor.forward',  # noqa: E501
         'torch.cat'
     ])"""
-    with open(f"{cache_path}current_base_tensorrt_deploy_config.py", "w") as f:
+    with open(f"{cache_path}/current_base_tensorrt_deploy_config.py", "w") as f:
         f.write(cfg)
 
 
@@ -84,7 +84,7 @@ def build_quantization_config(
     decay,
 ):
     return f"""_base_ = [
-    '{cache_path}/modified_cfg.py',
+    'modified_cfg.py',
     'current_base_tensorrt_deploy_config.py']
 
 float_checkpoint = '{checkpoint}'  # noqa: E501

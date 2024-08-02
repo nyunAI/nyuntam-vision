@@ -48,7 +48,7 @@ class TensorRTQAT:
         self.logger = logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
         self.job_id = kwargs.get("JOB_ID", "1")
-        self.fake_quantize_step = kwargs.get("FAKE")
+        self.fake_quantize_step = kwargs.get("FAKE_QUANTIZED_STEP",True)
         if self.wandb:
             wandb.init(project="Kompress Tensorrt QAT", name=str(self.job_id))
             wandb.config.update(self.kwargs)
