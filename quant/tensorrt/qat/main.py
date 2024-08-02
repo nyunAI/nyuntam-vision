@@ -4,7 +4,7 @@ import os
 import logging
 import shutil
 from .utils import *
-from ....core.utils.mmutils import create_input_image, customize_config
+from vision.core.utils.mmutils import create_input_image, customize_config
 
 
 class TensorRTQAT:
@@ -44,24 +44,16 @@ class TensorRTQAT:
         self.val_interval = kwargs.get("VALIDATION_INTERVAL", 1)
         self.weight_decay = kwargs.get("WEIGHT_DECAY", 0.0005)
         self.model_path = kwargs.get("MODEL_PATH", "models")
-        self.logging_path = kwargs.get("LOGGING_PATH", "logs")
-
-        self.logging_path = logging.getLogger(__name__)
+        self.work_dir = os.getcwd()
+        self.logger = logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
         self.job_id = kwargs.get("JOB_ID", "1")
+        self.fake_quantize_step = kwargs.get("FAKE")
         if self.wandb:
             wandb.init(project="Kompress Tensorrt QAT", name=str(self.job_id))
             wandb.config.update(self.kwargs)
         self.qat = kwargs.get("QAT", False)
         self.platform = kwargs.get("PLATFORM", "mmdet")
-
-    def list_subdirectories(self, directory):
-        subdirectories = [
-            d
-            for d in os.listdir(directory)
-            if os.path.isdir(os.path.join(directory, d))
-        ]
-        return subdirectories
 
     def compress_model(self):
         if (
@@ -84,6 +76,7 @@ class TensorRTQAT:
             self.max_box,
             self.pre_top_k,
             self.keep_top_k,
+            self.cache_path
         )
         config = build_quantization_config(
             self.ckpt_path,
@@ -97,33 +90,46 @@ class TensorRTQAT:
             self.factor,
             self.weight_decay,
         )
-        customize_config(config, self.data_path, self.model_path, self.batch_size)
+        customize_config(config, self.data_path, self.model_path, self.batch_size,self.cache_path)
+        quant_config_path = f"{self.cache_path}/current_quant_final.py"
 
-        os.system(
-            f"python /mmrazor/tools/train.py current_quant_final.py --work-dir {self.job_path}"
-        )
-        self.quantized_pth_location = None
+        if self.fake_quantize_step == True:
+            os.system(
+                f"python {self.work_dir}/vision/core/utils/mmrazortrain.py {quant_config_path} --work-dir {self.job_path}"
+            )
+            self.quantized_pth_location = None
 
-        if "last_checkpoint" in os.listdir(self.model_path):
-            with open(os.path.join(self.model_path, "last_checkpoint"), "r") as f:
-                self.quantized_pth_location = f.readline()
-                self.logger.info(
-                    f"Fake Quantized pth is present at {self.quantized_pth_location}"
-                )
+            if "last_checkpoint" in os.listdir(self.model_path):
+                with open(os.path.join(self.model_path, "last_checkpoint"), "r") as f:
+                    self.quantized_pth_location = f.readline()
+                    self.logger.info(
+                        f"Fake Quantized pth is present at {self.quantized_pth_location}"
+                    )
 
-        if self.quantized_pth_location == None:
-            self.logger.info("Fake Quantization Unsuccessful, checkpoint not found")
-            raise Exception("Fake Quantization Unsuccessful, checkpoint not found")
+            if self.quantized_pth_location == None:
+                self.logger.info("Fake Quantization Unsuccessful, checkpoint not found")
+                raise Exception("Fake Quantization Unsuccessful, checkpoint not found")
+            else:
+                self.logger.info("Fake Quantization Successful")
         else:
-            self.logger.info("Fake Quantization Successful")
-        # deply config
-        build_mmdeploy_config(self.imsize)
-        create_input_image(self.loaders["test"])
-        os.system(
-            f"docker exec -it Nyun_Kompress python mmdeploy/tools/deploy.py current_tensorrt_deploy_config.py current_quant_final.py {self.quantized_pth_location} demo_image.png"
-        )
-        self.logger.info("Deployment Successful")
-        shutil.move("/workspace/end2end.xml", os.path.join(self.model_path, "mds.xml"))
-        shutil.move("/workspace/end2end.bin", os.path.join(self.model_path, "mds.bin"))
+            # deply config
+            self.quantized_pth_location = self.kwargs.get("FAKE_QUANTIZED_PATH", "")
+
+            if self.quantized_pth_location == None:
+                self.logger.info(f"Fake Quantized Path is None")
+                raise Exception("Fake Quantized Path is None")
+            elif not os.path.exists(self.quantized_pth_location):
+                self.logger.info(f"Fake Quantized Path is Not Present at {self.quantized_pth_location}")
+                raise Exception(f"Fake Quantized Path is Not Present at {self.quantized_pth_location}")               
+            build_mmdeploy_config(self.imsize,self.cache_path)
+            create_input_image(self.loaders["test"],self.cache_path)
+            deploy_config_path = f"{self.cache_path}/current_tensorrt_deploy_config.py"
+            demo_image_path = f"{self.cache_path}/demo_image.png"
+            os.system(
+                f"python {self.work_dir}/vision/core/utils/mmrazordeploy.py {deploy_config_path} {quant_config_path} {self.quantized_pth_location} {demo_image_path}"
+            )
+            self.logger.info("Deployment Successful")
+            shutil.move("end2end.xml", os.path.join(self.model_path, "mds.xml"))
+            shutil.move("end2end.bin", os.path.join(self.model_path, "mds.bin"))
 
         return self.model, __name__
