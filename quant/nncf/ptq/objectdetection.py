@@ -70,12 +70,13 @@ class NNCFObjectDetection(NNCF):
                 )
                 break
         # deply config
-        build_mmdeploy_config(self.imsize)
-        create_input_image(self.loaders["test"])
+        build_mmdeploy_config(self.imsize,self.cache_path)
+        create_input_image(self.loaders["test"],self.cache_path)
         deploy_cfg_path =f"{self.cache_path}/current_openvino_deploy_config.py"
         quant_cfg_path = f"{self.cache_path}/current_quant_config.py"
+        demo_img_path = f"{self.cache_path}/demo_image.png"
         os.system(
-            f"python {self.work_path}/vision/core/utils/mmrazordeploy.py {deploy_cfg_path} {quant_cfg_path} {self.quantized_pth_location} demo_image.png"
+            f"python {self.work_path}/vision/core/utils/mmrazordeploy.py {deploy_cfg_path} {quant_cfg_path} {self.quantized_pth_location} {demo_img_path}"
         )
         self.logger.info("Deployment Successful")
         shutil.move("end2end.xml", os.path.join(self.model_path, "mds.xml"))
