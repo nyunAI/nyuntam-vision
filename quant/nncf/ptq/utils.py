@@ -6,6 +6,7 @@ def write_deploy_cfg(
     max_box,
     pre_top_k,
     keep_top_k,
+    cache_path
 ):
     cfg = f"""deploy_cfg = dict(
     onnx_config=dict(
@@ -54,7 +55,7 @@ def write_deploy_cfg(
         'mmdet.models.detectors.two_stage.TwoStageDetector.forward',
         'mmdet.models.detectors.single_stage_instance_seg.SingleStageInstanceSegmentor.forward'  # noqa: E501
     ])"""
-    with open("current_base_openvino_deploy_config.py", "w") as f:
+    with open(f"{cache_path}/current_base_openvino_deploy_config.py", "w") as f:
         f.write(cfg)
 
 
@@ -120,7 +121,7 @@ custom_hooks = []
 """
 
 
-def build_mmdeploy_config(insize):
+def build_mmdeploy_config(insize,cache_path):
     config = f"""_base_ = ['vision/core/utils/mmdeployconfigs/mmdet/_base_/base_dynamic.py', 'vision/core/utils/mmdeployconfigs/_base_/backends/openvino.py']
 
 onnx_config = dict(input_shape=None)
@@ -128,5 +129,5 @@ onnx_config = dict(input_shape=None)
 backend_config = dict(
     model_inputs=[dict(opt_shapes=dict(input=[1, 3, {insize}, {insize}]))])
 """
-    with open("current_openvino_deploy_config.py", "w") as f:
+    with open(f"{cache_path}/current_openvino_deploy_config.py", "w") as f:
         f.write(config)

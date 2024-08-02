@@ -4,6 +4,7 @@ from glob import glob
 from .main import NNCF
 from vision.core.utils.mmutils import customize_config, create_input_image
 from .utils import write_deploy_cfg, build_quantization_config, build_mmdeploy_config
+from pathlib import Path
 
 class NNCFObjectDetection(NNCF):
     def __init__(self, model, loaders=None, **kwargs):
@@ -20,7 +21,7 @@ class NNCFObjectDetection(NNCF):
         self.keep_top_k = kwargs.get("MAX_BBOX_PER_IMG", 100)
         self.max_box = kwargs.get("MAX_BBOX_PER_CLS", 100)
         self.pre_top_k = kwargs.get("NMS_PRE", 1000)
-
+        self.work_path = os.getcwd()
     def list_subdirectories(self, directory):
         subdirectories = [
             d
@@ -50,13 +51,14 @@ class NNCFObjectDetection(NNCF):
             self.max_box,
             self.pre_top_k,
             self.keep_top_k,
+            self.cache_path
         )
         config = build_quantization_config(
             self.ckpt_path,
             self.cache_path,
         )
         runner = customize_config(
-            config, self.data_path, self.model_path, self.batch_size
+            config, self.data_path, self.model_path, self.batch_size,self.cache_path
         )
         runner.test()
         self.logger.info("Fake Quantization Successful")
@@ -70,10 +72,12 @@ class NNCFObjectDetection(NNCF):
         # deply config
         build_mmdeploy_config(self.imsize)
         create_input_image(self.loaders["test"])
+        deploy_cfg_path =f"{self.cache_path}/current_openvino_deploy_config.py"
+        quant_cfg_path = f"{self.cache_path}/current_quant_config.py"
         os.system(
-            f"python vision/core/utils/mmrazordeploy.py current_openvino_deploy_config.py current_quant_config.py {self.quantized_pth_location} demo_image.png"
+            f"python {self.work_path}/vision/core/utils/mmrazordeploy.py {deploy_cfg_path} {quant_cfg_path} {self.quantized_pth_location} demo_image.png"
         )
         self.logger.info("Deployment Successful")
-        shutil.move("/workspace/nyuntam/end2end.xml", os.path.join(self.model_path, "mds.xml"))
-        shutil.move("/workspace/nyuntam/end2end.bin", os.path.join(self.model_path, "mds.bin"))
+        shutil.move("end2end.xml", os.path.join(self.model_path, "mds.xml"))
+        shutil.move("end2end.bin", os.path.join(self.model_path, "mds.bin"))
         return runner.model, __name__
