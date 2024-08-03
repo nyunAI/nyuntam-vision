@@ -1,4 +1,4 @@
-from .ptq import TensorRT
+#from .ptq import TensorRT
 from .qat import TensorRTQAT
 
 __all__ = [
