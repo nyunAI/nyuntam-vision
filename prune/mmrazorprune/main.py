@@ -64,7 +64,7 @@ class MMrazorPrune:
             wandb.config.update(self.kwargs)
 
     def write_config(self):
-        config = f"""_base_ = '{self.cache_path}/modified_cfg.py'
+        config = f"""_base_ = 'modified_cfg.py'
 pretrained_path = '{self.pth_path}'  # noqa
 
 interval = {self.interval}
@@ -123,7 +123,7 @@ custom_hooks = getattr(_base_, 'custom_hooks', []) + [
 ]
 
         """
-        with open("current_fisher_config.py", "w") as f:
+        with open(f"{self.cache_path}/current_fisher_config.py", "w") as f:
             f.write(config)
         return
 
@@ -160,13 +160,13 @@ custom_hooks = _base_.custom_hooks[:-2]
 
 # delete ddp
 model_wrapper_cfg = None'''
-        with open("current_fisher_finetune_config.py", "w") as f:
+        with open(f"{self.cache_path}/current_fisher_finetune_config.py", "w") as f:
             f.write(config)
         return
 
     def customize_config(self):
         self.write_config()
-        cfg = Config.fromfile("current_fisher_config.py")
+        cfg = Config.fromfile(f"{self.cache_path}/current_fisher_config.py")
         cfg["train_cfg"]["max_epochs"] = self.prune_epochs
         cfg.work_dir = self.job_path
         cfg.dump("current_config_new.py")
@@ -184,9 +184,9 @@ model_wrapper_cfg = None'''
                 f"Cannot Find Model Post Pruned Stage flops_XX.pth at {self.job_path}"
             )
         self.write_finetune_cfg(flops_file_path)
-        cfg = Config.fromfile("current_fisher_finetune_config.py")
+        cfg = Config.fromfile(f"{self.cache_path}/current_fisher_finetune_config.py")
         cfg["train_cfg"]["max_epochs"] = self.epochs
-        cfg.dump("current_config_finetune_new.py")
+        cfg.dump(f"{self.cache_path}/current_config_finetune_new.py")
         return cfg
 
     def save_model(self, pruned_model):
@@ -221,8 +221,8 @@ model_wrapper_cfg = None'''
         cfg = self.customize_config()
         command = [
             "python",
-            "/mmrazor/tools/train.py",
-            "current_config_new.py",
+            "vision/core/utils/mmrazortrain.py",
+            f"{self.cache_path}current_config_new.py",
             "--work-dir",
             self.job_path,
         ]
