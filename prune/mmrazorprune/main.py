@@ -221,7 +221,7 @@ model_wrapper_cfg = None'''
         cfg = self.customize_config()
         command = [
             "python",
-            "/mmrazor/tools/train.py",
+            "vision/core/utils/mmrazortrain.py",
             f"{self.cache_path}current_config_new.py",
             "--work-dir",
             self.job_path,
