@@ -16,7 +16,8 @@ from mmdeploy.apis.core import PIPELINE_MANAGER
 from mmdeploy.apis.utils import to_backend
 from mmdeploy.backend.sdk.export_info import export2SDK
 from mmdeploy.utils import (IR, Backend, get_backend, get_calib_filename,
-                            get_ir_config, get_partition_config, load_config, target_wrapper)
+                            get_ir_config, get_partition_config,
+                            get_root_logger, load_config, target_wrapper)
 
 
 def parse_args():
@@ -66,7 +67,7 @@ def parse_args():
 
 
 def create_process(name, target, args, kwargs, ret_value=None):
-    logger = logging.getLogger(__name__)
+    logger = get_root_logger()
     logger.info(f'{name} start.')
     log_level = logger.level
 
@@ -102,7 +103,7 @@ def torch2ir(ir_type: IR):
 def main():
     args = parse_args()
     set_start_method('spawn', force=True)
-    logger = logging.getLogger(__name__)
+    logger = get_root_logger()
     log_level = logging.getLevelName(args.log_level)
     logger.setLevel(log_level)
 
