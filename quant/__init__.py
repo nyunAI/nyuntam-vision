@@ -6,9 +6,11 @@ def initialize_initialization(algoname, task):
     elif algoname == "NNCF":
         if task == "image_classification":
             from .nncf import NNCFClassifcation
+
             return NNCFClassifcation
         elif task == "object_detection":
             from .nncf import NNCFObjectDetection
+
             return NNCFObjectDetection
 
     elif algoname == "TensorRT":
@@ -20,9 +22,14 @@ def initialize_initialization(algoname, task):
 
         return ONNXQuant
     elif algoname == "NNCFQAT":
-        from .nncf import NNCFQAT
+        if task == "image_classification":
+            from .nncf import NNCFQATClassification
 
-        return NNCFQAT
+            return NNCFQATClassification
+        elif task == "object_detection":
+            from .nncf import NNCFQATObjectDetection
+
+            return NNCFQATObjectDetection
 
     else:
         return None
