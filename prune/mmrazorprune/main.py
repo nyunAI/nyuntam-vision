@@ -170,7 +170,7 @@ model_wrapper_cfg = None'''
         cfg = Config.fromfile(f"{self.cache_path}/current_fisher_config.py")
         cfg["train_cfg"]["max_epochs"] = self.prune_epochs
         cfg.work_dir = self.job_path
-        cfg.dump("current_config_new.py")
+        cfg.dump(f"{self.cache_path}/current_config_new.py")
 
         return cfg
 
