@@ -8,7 +8,7 @@ from glob import glob
 import logging
 import torch
 from mmengine.runner import Runner
-
+from nyuntam.settings import ROOT
 
 class MMrazorPrune:
     def __init__(self, model, loaders=None, **kwargs):
@@ -44,6 +44,7 @@ class MMrazorPrune:
         cache_path = kwargs.get("CACHE_PATH", "")
         intermediate_path = os.path.join(cache_path, f"intermediate_{self.model_name}")
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
+        self.work_dir = ROOT
         if not os.path.exists(intermediate_path):
 
             os.makedirs(intermediate_path)
@@ -221,8 +222,8 @@ model_wrapper_cfg = None'''
         cfg = self.customize_config()
         command = [
             "python",
-            "vision/core/utils/mmrazortrain.py",
-            f"{self.cache_path}current_config_new.py",
+            f"{self.work_dir}/vision/core/utils/mmrazortrain.py",
+            f"{self.cache_path}/current_config_new.py",
             "--work-dir",
             self.job_path,
         ]
