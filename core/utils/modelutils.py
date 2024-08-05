@@ -125,7 +125,7 @@ def get_state_dict_or_model(loaded):
     """
     if isinstance(loaded, OrderedDict, dict):
         return "STATE_DICT"
-    elif isinstance(loaded, nn.Module): ## add imports
+    elif isinstance(loaded, nn.Module):
         return "MODEL"
 
 def init_annfile(cfg,data_path):

@@ -5,7 +5,7 @@ import logging
 import shutil
 from .utils import *
 from vision.core.utils.mmutils import create_input_image, customize_config
-
+from nyuntam.settings import ROOT
 
 class TensorRTQAT:
     def __init__(self, model, loaders=None, **kwargs):
@@ -44,7 +44,7 @@ class TensorRTQAT:
         self.val_interval = kwargs.get("VALIDATION_INTERVAL", 1)
         self.weight_decay = kwargs.get("WEIGHT_DECAY", 0.0005)
         self.model_path = kwargs.get("MODEL_PATH", "models")
-        self.work_dir = os.getcwd()
+        self.work_dir = ROOT
         self.logger = logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
         self.job_id = kwargs.get("JOB_ID", "1")
@@ -116,10 +116,8 @@ class TensorRTQAT:
             self.quantized_pth_location = self.kwargs.get("FAKE_QUANTIZED_PATH", "")
 
             if self.quantized_pth_location == None:
-                self.logger.info(f"Fake Quantized Path is None")
                 raise Exception("Fake Quantized Path is None")
             elif not os.path.exists(self.quantized_pth_location):
-                self.logger.info(f"Fake Quantized Path is Not Present at {self.quantized_pth_location}")
                 raise Exception(f"Fake Quantized Path is Not Present at {self.quantized_pth_location}")               
             build_mmdeploy_config(self.imsize,self.cache_path)
             create_input_image(self.loaders["test"],self.cache_path)

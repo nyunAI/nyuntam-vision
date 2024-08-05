@@ -5,7 +5,7 @@ from .main import NNCFQAT
 from vision.quant.nncf.ptq.utils import write_deploy_cfg, build_mmdeploy_config
 from vision.core.utils.mmutils import create_input_image, customize_config
 from .utils import build_quantization_config
-
+from nyuntam.settings import ROOT
 
 class NNCFQATObjectDetection(NNCFQAT):
     def __init__(self, model, loaders=None, **kwargs):
@@ -28,7 +28,7 @@ class NNCFQATObjectDetection(NNCFQAT):
         self.factor = kwargs.get("LR_SCHEDULER_FACTOR", 1)
         self.val_interval = kwargs.get("VALIDATION_INTERVAL", 1)
         self.weight_decay = kwargs.get("WEIGHT_DECAY", 0.0005)
-        self.work_path = os.getcwd()
+        self.work_path = ROOT
     def compress_model(self):
         if (
             self.custom_model_path
@@ -69,7 +69,7 @@ class NNCFQATObjectDetection(NNCFQAT):
         )
         quant_config_path = f"{self.cache_path}/current_quant_final.py"
         os.system(
-            f"python {self.work_path}vision/core/utils/mmrazortrain.py {quant_config_path} --work-dir {self.job_path}"
+            f"python {self.work_path}/vision/core/utils/mmrazortrain.py {quant_config_path} --work-dir {self.job_path}"
         )
         self.quantized_pth_location = None
         if "last_checkpoint" in os.listdir(self.model_path):
