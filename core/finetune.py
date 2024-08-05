@@ -12,7 +12,6 @@ def initialize_args(model, kwargs):
     opt = kwargs.get("OPTIMIZER", "Adam")
     lr = kwargs.get("LEARNING_RATE", 0.0001)
     optimizer = torch.optim.Adam(lr=lr, params=model.parameters())
-    # eval(f"torch.optim.{opt}")(lr = lr,params=model.parameters())
     epochs = kwargs.get("FINETUNE_EPOCHS", 10)
     save_model = kwargs.get("SAVE_MODEL", False)
     save_path = kwargs.get("SAVE_PATH", "")
