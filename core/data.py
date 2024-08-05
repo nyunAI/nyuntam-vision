@@ -1,7 +1,12 @@
 from torchvision.datasets.utils import download_and_extract_archive
 from torchvision.datasets import ImageFolder
 from torchvision import transforms
-from .datasets import ClassificationDatasetFactory
+from .datasets import (
+    ObjectDetectionDatasetFactory,
+    ClassificationDatasetFactory,
+    SegmentationDatasetFactory,
+    PoseEstimationDatasetFactory,
+)
 import os
 
 
@@ -67,6 +72,35 @@ def prepare_data(dataset_name: str, url: str, to_path: str, **kwargs):
                 transform=transforms1,
                 target_transform=target_transforms,
             )
+        elif task == "object_detection":
+            dataset_dict = ObjectDetectionDatasetFactory.create_dataset(
+                name=dataset_name,
+                root=to_path,
+                split_types=["train", "val", "test"],
+                val_fraction=0.2,
+                transform=transforms1,
+                target_transform=target_transforms,
+            )
+        elif task == "segmentation":
+            dataset_dict = SegmentationDatasetFactory.create_dataset(
+                name=dataset_name,
+                root=to_path,
+                split_types=["train", "val", "test"],
+                val_fraction=0.2,
+                transform=transforms1,
+                target_transform=target_transforms,
+            )
+        elif task == "pose_estimation":
+            dataset_dict = PoseEstimationDatasetFactory.create_dataset(
+                name=dataset_name,
+                root=to_path,
+                split_types=["train", "val", "test"],
+                val_fraction=0.2,
+                transform=transforms1,
+                target_transform=target_transforms,
+            )
         else:
-            raise Exception(f"Unknown Task {task}. Known Tasks =[image_classification]")
+            raise Exception(
+                f"Unknown Task {task}. Known Tasks =[image_classification,object_detection,segmentation,tracking,pose_estimation]"
+            )
     return dataset_dict
