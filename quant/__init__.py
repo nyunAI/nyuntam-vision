@@ -30,6 +30,9 @@ def initialize_initialization(algoname, task):
             from .nncf import NNCFQATObjectDetection
 
             return NNCFQATObjectDetection
+    elif algoname == "TensorRTQAT":
+        from .tensorrt import TensorRTQAT
+        return TensorRTQAT
 
     else:
         return None

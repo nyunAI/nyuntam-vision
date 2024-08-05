@@ -36,7 +36,7 @@ def correct_model_name(model_name):
         return model_name
 
 
-def replace_all_instances(config, config_key, new_value, additional_parameters={}):
+def replace_all_instances(config, config_key, new_value, create_additional_parameters={}):
     from mmengine.config import Config
     from mmengine.config.config import ConfigDict
 
@@ -49,19 +49,19 @@ def replace_all_instances(config, config_key, new_value, additional_parameters={
     additional_parameters: Any new parameters to be added at the same level of the parameter to be replaced.
     """
 
-    def change_value(dic, key, value, additional_parameters):
+    def change_value(dic, key, value, additional_parameters={}):
         for k, v in dic.items():
             if k == key and type(dic[k]) == type(value):
                 dic[k] = value
-                if not additional_parameters:
+                if list(additional_parameters.keys()) !=[]:
                     for k, v in additional_parameters.items():
                         dic[k] = v
             elif isinstance(v, ConfigDict):
-                change_value(v, key, value)
+                change_value(v, key, value,additional_parameters)
 
     for k in config.keys():
         if isinstance(config[k], ConfigDict):
-            change_value(config[k], config_key, new_value, additional_parameters)
+            change_value(config[k], config_key, new_value, create_additional_parameters)
         elif k == config_key:
             config[k] = new_value
     return config
@@ -119,20 +119,22 @@ def modify_head_classification(model, model_name, num_classes):
     return model
 
 
-def find_state_or_model(loaded):
+def get_state_dict_or_model(loaded):
     """
-    Identifies if loaded model is a state dict or a nn.module
+    Identifies if loaded file is a state dict or a nn.module
     """
-    if isinstance(loaded, OrderedDict) or isinstance(loaded, dict):
+    if isinstance(loaded, OrderedDict, dict):
         return "STATE_DICT"
-    else:
+    elif isinstance(loaded, nn.Module):
         return "MODEL"
 
-
-def load_model_or_weights(path):
-    "Loads the custom model / weights from the provided path"
-    loaded = torch.load(path)
-    if find_state_or_model(loaded) == "MODEL":
-        return loaded, 1
-    else:
-        return loaded, 0
+def init_annfile(cfg,data_path):
+        if "ann_file" in [i for i in cfg['test_evaluator'].keys()]:
+            cfg['test_evaluator']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
+        else:
+            cfg['test_evaluator']['dataset']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
+        if "ann_file" in [i for i in cfg['val_evaluator'].keys()]:
+            cfg['val_evaluator']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
+        else:
+            cfg['val_evaluator']['dataset']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
+        return cfg
