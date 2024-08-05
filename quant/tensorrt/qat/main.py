@@ -107,7 +107,6 @@ class TensorRTQAT:
                     )
 
             if self.quantized_pth_location == None:
-                self.logger.info("Fake Quantization Unsuccessful, checkpoint not found")
                 raise Exception("Fake Quantization Unsuccessful, checkpoint not found")
             else:
                 self.logger.info("Fake Quantization Successful")
