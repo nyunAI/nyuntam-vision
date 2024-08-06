@@ -84,5 +84,5 @@ class MMRazorDistillPoseEstimation(MMRazorDistill):
         cfg["input_shape"] = self.input_shape
         cfg["train_cfg"]["max_epochs"] = self.epochs
         cfg.work_dir = self.cache_path
-        cfg.dump(f"{self.cache_path}current_config_new.py")
+        cfg.dump(f"{self.cache_path}/current_config_new.py")
         return cfg
