@@ -1,12 +1,18 @@
-def initialize_initialization(algoname):
+def initialize_initialization(algoname, task):
     if algoname == "FXQuant":
         from .torch import FXQuant
 
         return FXQuant
     elif algoname == "NNCF":
-        from .nncf import NNCF
+        if task == "image_classification":
+            from .nncf import NNCFClassifcation
 
-        return NNCF
+            return NNCFClassifcation
+        elif task == "object_detection":
+            from .nncf import NNCFObjectDetection
+
+            return NNCFObjectDetection
+
     elif algoname == "TensorRT":
         from .tensorrt import TensorRT
 
@@ -16,9 +22,17 @@ def initialize_initialization(algoname):
 
         return ONNXQuant
     elif algoname == "NNCFQAT":
-        from .nncf import NNCFQAT
+        if task == "image_classification":
+            from .nncf import NNCFQATClassification
 
-        return NNCFQAT
+            return NNCFQATClassification
+        elif task == "object_detection":
+            from .nncf import NNCFQATObjectDetection
+
+            return NNCFQATObjectDetection
+    elif algoname == "TensorRTQAT":
+        from .tensorrt import TensorRTQAT
+        return TensorRTQAT
 
     else:
         return None

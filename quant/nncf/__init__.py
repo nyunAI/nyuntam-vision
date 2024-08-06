@@ -1,4 +1,9 @@
-from .nncf import NNCF
-from .nncfqat import NNCFQAT
+from .ptq import NNCFClassifcation, NNCFObjectDetection
+from .qat import NNCFQATClassification, NNCFQATObjectDetection
 
-__all__ = ["nncf", "nncfqat"]
+__all__ = [
+    "NNCFClassification",
+    "NNCFObjectDetection",
+    "NNCFQATClassification",
+    "NNCFQATObjectDetection",
+]
