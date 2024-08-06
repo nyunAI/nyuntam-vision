@@ -26,20 +26,19 @@ class CompressionFactory(BaseFactory):
     def collate_fn_obj(self, batch):
         images, targets = zip(*batch)
         images = torch.stack(images, 0)
-        # targets = torch.stack(targets,0)
 
         return tuple([images, targets])
 
     def get_algorithm(self, name: str) -> Algorithm:
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
-        module = importlib.import_module(f"{algo_type}")
-        loaded_algorithm = getattr(module, "initialize_initialization")(name)
+        task = self.kwargs.get("TASK", "image_classification")
+        module = importlib.import_module(f"vision.{algo_type}")
+        loaded_algorithm = getattr(module, "initialize_initialization")(name, task)
         return loaded_algorithm
 
     def __init__(self, kwargs):
-        super().__init__(kwargs)
-
         self.kwargs = kwargs
+        super().__init__(kwargs)
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         algorithm = self.kwargs.get("ALGORITHM", "ChipNet")
 
@@ -49,7 +48,8 @@ class CompressionFactory(BaseFactory):
         os.makedirs(self.kwargs.get("JOB_PATH"), exist_ok=True)
         os.makedirs(self.kwargs.get("DATA_PATH"), exist_ok=True)
         os.makedirs(self.kwargs.get("LOGGING_PATH"), exist_ok=True)
-        self.set_logger(logging_path=self.kwargs.get("LOGGING_PATH"))
+        self.set_logger(self.kwargs.get("LOGGING_PATH"))
+
         loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():
@@ -87,7 +87,6 @@ class CompressionFactory(BaseFactory):
 
         elif algorithm not in []:
             if os.path.exists(model_name):
-                # model is to be loaded from model_name => cache_path := model_name
                 self.kw["CACHE_PATH"] = model_name
             else:
                 cache_path = os.path.join(kw["CACHE_PATH"], model_name)
@@ -102,20 +101,28 @@ class CompressionFactory(BaseFactory):
         if dataset_dict != None:
             for split in dataset_dict:
                 shuffle = True if split == "train" else False
-                dataloader_dict[split] = DataLoader(
-                    dataset_dict[split],
-                    batch_size=self.kw.get("BATCH_SIZE"),
-                    shuffle=shuffle,
-                    num_workers=self.kw.get("WORKERS", 0),
-                    pin_memory=self.kw.get("PIN_MEM", False),
-                )
+                if task not in ["object_detection", "segmentation", "pose_estimation"]:
+                    dataloader_dict[split] = DataLoader(
+                        dataset_dict[split],
+                        batch_size=self.kw.get("BATCH_SIZE"),
+                        shuffle=shuffle,
+                        num_workers=self.kw.get("WORKERS", 0),
+                        pin_memory=self.kw.get("PIN_MEM", False),
+                    )
+                else:
+                    dataloader_dict[split] = DataLoader(
+                        dataset_dict[split],
+                        batch_size=self.kw.get("BATCH_SIZE"),
+                        shuffle=shuffle,
+                        num_workers=self.kw.get("WORKERS", 0),
+                        pin_memory=self.kw.get("PIN_MEM", False),
+                        collate_fn=self.collate_fn_obj,
+                    )
         self.dataloader_dict = dataloader_dict
         if algo_type == "distill":
             self.algorithm = loaded_algorithm(
                 model, student_model, dataloader_dict, **(self.kw)
             )
-        elif algorithm in []:
-            self.algorithm = loaded_algorithm(**(self.kw))
         else:
             self.algorithm = loaded_algorithm(model, dataloader_dict, **(self.kw))
         self.algorithm.log_name = self.kw.get("log_name")
