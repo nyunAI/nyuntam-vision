@@ -8,7 +8,7 @@ def initialize_initialization(algoname, task):
             from .mmrazordistill import MMRazorDistillObjectDetection
 
             return MMRazorDistillObjectDetection
-        elif task == "image_segmentation":
+        elif task == "segmentation":
             from .mmrazordistill import MMRazorDistillSegmentation
 
             return MMRazorDistillSegmentation

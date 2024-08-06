@@ -6,9 +6,10 @@ import torch
 from mmengine.runner import Runner
 from .utils import *
 from vision.core.utils.modelutils import download_mim_config
+from abc import ABC, abstractmethod
 
 
-class MMRazorDistill:
+class MMRazorDistill(ABC):
     def __init__(self, teacher_model, model, loaders=None, **kwargs):
         self.kwargs = kwargs
         self.model = model
@@ -61,9 +62,11 @@ class MMRazorDistill:
             wandb.init(project="Kompress MMRazor", name=str(self.job_id))
             wandb.config.update(self.kwargs)
 
+    @abstractmethod
     def write_config(self):
         pass
 
+    @abstractmethod
     def customize_config(self):
         pass
 
