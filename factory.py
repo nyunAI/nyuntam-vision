@@ -1,5 +1,5 @@
 # nyuntam
-from algorithm import Algorithm
+from algorithm import VisionAlgorithm
 from factory import Factory as BaseFactory, FactoryTypes
 
 import torch
@@ -30,7 +30,7 @@ class CompressionFactory(BaseFactory):
 
         return tuple([images, targets])
 
-    def get_algorithm(self, name: str) -> Algorithm:
+    def get_algorithm(self, name: str) -> VisionAlgorithm:
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         module = importlib.import_module(f"{algo_type}")
         loaded_algorithm = getattr(module, "initialize_initialization")(name)
