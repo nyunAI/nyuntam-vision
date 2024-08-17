@@ -14,9 +14,14 @@ def initialize_initialization(algoname, task):
             return NNCFObjectDetection
 
     elif algoname == "TensorRT":
-        from .tensorrt import TensorRT
+        if task == "image_classification":
+            from .tensorrt import TensorRTClassification
 
-        return TensorRT
+            return TensorRTClassification
+        elif task == "object_detection":
+            from .tensorrt import TensorRTObjectDetection
+
+            return TensorRTObjectDetection
     elif algoname == "ONNXQuant":
         from .onnx import ONNXQuant, DummyDataReader
 
@@ -32,6 +37,7 @@ def initialize_initialization(algoname, task):
             return NNCFQATObjectDetection
     elif algoname == "TensorRTQAT":
         from .tensorrt import TensorRTQAT
+
         return TensorRTQAT
 
     else:

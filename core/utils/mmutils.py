@@ -5,14 +5,14 @@ from mmengine.runner import Runner
 import os
 
 
-def create_input_image(loader,cache_path):
+def create_input_image(loader, cache_path):
     x, y = next(iter(loader))
     if x.shape[0] != 1:
         x = x[0]
     save_image(x, f"{cache_path}/demo_image.png")
 
 
-def customize_config(config, data_path,model_path, batch_size,cache_path):
+def customize_config(config, data_path, model_path, batch_size, cache_path):
     with open(f"{cache_path}/current_quant_config.py", "w") as f:
         f.write(config)
     cfg = Config.fromfile(f"{cache_path}/current_quant_config.py")

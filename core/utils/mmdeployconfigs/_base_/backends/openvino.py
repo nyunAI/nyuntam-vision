@@ -1,1 +1,1 @@
-backend_config = dict(type='openvino')
+backend_config = dict(type="openvino")

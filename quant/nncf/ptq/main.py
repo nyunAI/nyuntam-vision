@@ -1,7 +1,10 @@
 import wandb
 import logging
+from nyuntam.algorithm import VisionAlgorithm
+from abc import abstractmethod
 
-class NNCF:
+
+class NNCF(VisionAlgorithm):
     def __init__(self, model, loaders=None, **kwargs):
         self.kwargs = kwargs
         self.model = model
@@ -20,5 +23,6 @@ class NNCF:
             wandb.init(project="Kompress NNCF", name=str(self.job_id))
             wandb.config.update(self.kwargs)
 
+    @abstractmethod
     def compress_model(self):
         pass

@@ -36,7 +36,9 @@ def correct_model_name(model_name):
         return model_name
 
 
-def replace_all_instances(config, config_key, new_value, create_additional_parameters={}):
+def replace_all_instances(
+    config, config_key, new_value, create_additional_parameters={}
+):
     from mmengine.config import Config
     from mmengine.config.config import ConfigDict
 
@@ -53,11 +55,11 @@ def replace_all_instances(config, config_key, new_value, create_additional_param
         for k, v in dic.items():
             if k == key and type(dic[k]) == type(value):
                 dic[k] = value
-                if list(additional_parameters.keys()) !=[]:
+                if list(additional_parameters.keys()) != []:
                     for k, v in additional_parameters.items():
                         dic[k] = v
             elif isinstance(v, ConfigDict):
-                change_value(v, key, value,additional_parameters)
+                change_value(v, key, value, additional_parameters)
 
     for k in config.keys():
         if isinstance(config[k], ConfigDict):
@@ -125,16 +127,25 @@ def get_state_dict_or_model(loaded):
     """
     if isinstance(loaded, OrderedDict, dict):
         return "STATE_DICT"
-    elif isinstance(loaded, nn.Module): ## add imports
+    elif isinstance(loaded, nn.Module):  ## add imports
         return "MODEL"
 
-def init_annfile(cfg,data_path):
-        if "ann_file" in [i for i in cfg['test_evaluator'].keys()]:
-            cfg['test_evaluator']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
-        else:
-            cfg['test_evaluator']['dataset']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
-        if "ann_file" in [i for i in cfg['val_evaluator'].keys()]:
-            cfg['val_evaluator']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
-        else:
-            cfg['val_evaluator']['dataset']['ann_file'] = os.path.join(data_path,'annotations/instances_val2017.json')
-        return cfg
+
+def init_annfile(cfg, data_path):
+    if "ann_file" in [i for i in cfg["test_evaluator"].keys()]:
+        cfg["test_evaluator"]["ann_file"] = os.path.join(
+            data_path, "annotations/instances_val2017.json"
+        )
+    else:
+        cfg["test_evaluator"]["dataset"]["ann_file"] = os.path.join(
+            data_path, "annotations/instances_val2017.json"
+        )
+    if "ann_file" in [i for i in cfg["val_evaluator"].keys()]:
+        cfg["val_evaluator"]["ann_file"] = os.path.join(
+            data_path, "annotations/instances_val2017.json"
+        )
+    else:
+        cfg["val_evaluator"]["dataset"]["ann_file"] = os.path.join(
+            data_path, "annotations/instances_val2017.json"
+        )
+    return cfg

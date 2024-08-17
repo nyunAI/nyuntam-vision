@@ -6,7 +6,7 @@ def write_deploy_cfg(
     max_box,
     pre_top_k,
     keep_top_k,
-    cache_path
+    cache_path,
 ):
     cfg = f"""deploy_cfg = dict(
     onnx_config=dict(
@@ -121,7 +121,7 @@ custom_hooks = []
 """
 
 
-def build_mmdeploy_config(insize,cache_path):
+def build_mmdeploy_config(insize, cache_path):
     config = f"""_base_ = ['vision/core/utils/mmdeployconfigs/mmdet/_base_/base_dynamic.py', 'vision/core/utils/mmdeployconfigs/_base_/backends/openvino.py']
 
 onnx_config = dict(input_shape=None)

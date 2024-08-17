@@ -6,7 +6,7 @@ def write_deploy_cfg(
     max_box,
     pre_top_k,
     keep_top_k,
-    cache_path
+    cache_path,
 ):
     cfg = f"""deploy_cfg = dict(
     onnx_config=dict(
@@ -152,7 +152,7 @@ default_hooks = dict(sync=dict(type='SyncBuffersHook'))
 custom_hooks = []"""
 
 
-def build_mmdeploy_config(insize,cache_path):
+def build_mmdeploy_config(insize, cache_path):
     config = f"""_base_ = ['../_base_/base_static.py', '../../_base_/backends/tensorrt-int8.py']
 
 onnx_config = dict(input_shape=(320, 320))

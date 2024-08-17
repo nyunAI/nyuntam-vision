@@ -6,16 +6,13 @@ from torch.ao.quantization import (
 import torch.ao.quantization.quantize_fx as quantize_fx
 import copy
 import wandb
-import os
 import logging
 from tqdm import tqdm
-import sys
-
-sys.path.append(os.path.abspath(os.path.join("...", "core")))
-from core.finetune import train
+from vision.core.finetune import train
+from nyuntam.algorithm import VisionAlgorithm
 
 
-class FXQuant:
+class FXQuant(VisionAlgorithm):
     def __init__(self, model, loaders=None, **kwargs):
         self.model = model
         self.loaders = loaders

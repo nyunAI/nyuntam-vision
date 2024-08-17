@@ -10,7 +10,7 @@ from ..utils.modelutils import (
     replace_all_instances,
     correct_model_name,
     get_metainfo_coco,
-    init_annfile
+    init_annfile,
 )
 
 
@@ -65,7 +65,7 @@ def get_mmdet_model(name, kwargs):
     min_bbox_size = kwargs.get("MIN_BBOX_SIZE", 0)
     nms_pre = kwargs.get("NMS_PRE", 1000)
     metainfo = get_metainfo_coco(data_path)
-    ann_file = os.path.join( "annotations/instances_val2017.json")
+    ann_file = os.path.join("annotations/instances_val2017.json")
     changes = {"data_root": kwargs.get("DATA_PATH", "")}
     cfg.merge_from_dict(changes)
     cfg.work_dir = os.path.join(job_path)
@@ -74,7 +74,7 @@ def get_mmdet_model(name, kwargs):
     cfg = replace_all_instances(
         cfg, "data_root", data_path, create_additional_parameters={"metainfo": metainfo}
     )
-    cfg = init_annfile(cfg,data_path)
+    cfg = init_annfile(cfg, data_path)
     cfg = replace_all_instances(cfg, "max_epochs", epochs)
     cfg = replace_all_instances(cfg, "batch_size", batch_size)
     cfg = replace_all_instances(cfg, "base_batch_size", batch_size)
@@ -92,8 +92,10 @@ def get_mmdet_model(name, kwargs):
             del cfg["optim_wrapper"]["paramwise_cfg"]
     if kwargs["ALGORITHM"] in ["MMRazorPrune"]:
         if "data_root" in cfg["train_dataset"]["dataset"]:
-            cfg['train_dataset']['dataset']['ann_file']="annotations/instances_val2017.json"
-            #del cfg["train_dataset"]["dataset"]["data_root"]
+            cfg["train_dataset"]["dataset"][
+                "ann_file"
+            ] = "annotations/instances_val2017.json"
+            # del cfg["train_dataset"]["dataset"]["data_root"]
     cfg.dump(os.path.join(cache_path, "modified_cfg.py"))
 
     cfg.work_dir = os.path.join(cache_path)

@@ -1,5 +1,6 @@
 ALGORITHM: TensorRT
 ALGO_TYPE: quant
+JOB_SERVICE: Kompress
 BATCH_SIZE: 1
 DATASET_NAME: CIFAR10
 MODEL: resnet50
@@ -29,5 +30,6 @@ VALIDATION_INTERVAL: 1
 
 quant:
     TensorRT:
+      NIL: NIL
       # No specific Parameters
 
