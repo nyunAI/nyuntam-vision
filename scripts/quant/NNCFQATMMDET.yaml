@@ -1,0 +1,50 @@
+JOB_SERVICE: Kompress
+ALGORITHM: NNCFQAT
+ALGO_TYPE: quant
+BATCH_SIZE: 16
+DATA_URL: ''
+DATASET_NAME: COCODETECTION # incase of autogptq ["wikitext2", "c4", "c4-new", "ptb", "ptb-new"]
+MODEL: yolox_s_8xb8-300e_coco
+NUM_CLASSES: 10
+CACHE_PATH: 'abc/.cache'
+JOB_ID: 1
+JOB_PATH: 'abc/jobs/40'
+DATA_PATH: 'abc/dataset/1'
+PIN_MEM: false
+PRETRAINED: false
+JOB_SERVICE: Kompress
+PLATFORM: mmdet
+TASK: object_detection
+WORKERS: 0
+insize: 640
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+TRAINING: False
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "SGD"
+LEARNING_RATE: 0.001
+WEIGHT_DECAY: 0.0005
+MOMENTUM: 0.9
+LR_SCHEDULER: ConstantLR
+LR_SCHEDULER_FACTOR: 1
+CUSTOM_MODEL_PATH: ''
+FINETUNE_EPOCHS: 1
+VALIDATE: True
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'abc'
+LOGGING_PATH: 'abc/logs'
+MODEL_PATH: 'abc/jobs/40'
+MAX_BBOX_PER_IMG: 100
+MAX_BBOX_PER_CLS: 100
+NMS_PRE: 1000
+MIN_BBOX_SIZE: 0
+IOU: 0.65
+SCORE_THRESHOLD: 0.03
+CONFIDENCE_THRESHOLD: 0.005
+quant:
+    NNCFQAT:
+        TRANSFORMER: True
+        QAT: True
+        EPOCHS: 1

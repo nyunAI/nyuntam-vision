@@ -7,7 +7,7 @@ from mmdet.utils import setup_cache_size_limit_of_dynamo
 from mmengine.config import Config
 from mmengine.registry import RUNNERS
 from mmengine.runner import Runner
-from ..utils.modelutils import replace_all_instances, get_metainfo_coco,init_annfile
+from ..utils.modelutils import replace_all_instances, get_metainfo_coco, init_annfile
 
 
 def get_mmyolo_model(name, kwargs):
@@ -68,7 +68,7 @@ def get_mmyolo_model(name, kwargs):
     cfg = replace_all_instances(
         cfg, "data_root", data_path, create_additional_parameters={"metainfo": metainfo}
     )
-    cfg = init_annfile(cfg,data_path)
+    cfg = init_annfile(cfg, data_path)
     cfg = replace_all_instances(cfg, "max_epochs", epochs)
     cfg = replace_all_instances(cfg, "batch_size", batch_size)
     cfg = replace_all_instances(cfg, "base_batch_size", batch_size)

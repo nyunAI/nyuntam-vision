@@ -6,6 +6,7 @@ from vision.core.utils.mmutils import customize_config, create_input_image
 from .utils import write_deploy_cfg, build_quantization_config, build_mmdeploy_config
 from pathlib import Path
 
+
 class NNCFObjectDetection(NNCF):
     def __init__(self, model, loaders=None, **kwargs):
         super().__init__(model, loaders, **kwargs)
@@ -22,6 +23,7 @@ class NNCFObjectDetection(NNCF):
         self.max_box = kwargs.get("MAX_BBOX_PER_CLS", 100)
         self.pre_top_k = kwargs.get("NMS_PRE", 1000)
         self.work_path = os.getcwd()
+
     def list_subdirectories(self, directory):
         subdirectories = [
             d
@@ -51,14 +53,14 @@ class NNCFObjectDetection(NNCF):
             self.max_box,
             self.pre_top_k,
             self.keep_top_k,
-            self.cache_path
+            self.cache_path,
         )
         config = build_quantization_config(
             self.ckpt_path,
             self.cache_path,
         )
         runner = customize_config(
-            config, self.data_path, self.model_path, self.batch_size,self.cache_path
+            config, self.data_path, self.model_path, self.batch_size, self.cache_path
         )
         runner.test()
         self.logger.info("Fake Quantization Successful")
@@ -70,9 +72,9 @@ class NNCFObjectDetection(NNCF):
                 )
                 break
         # deply config
-        build_mmdeploy_config(self.imsize,self.cache_path)
-        create_input_image(self.loaders["test"],self.cache_path)
-        deploy_cfg_path =f"{self.cache_path}/current_openvino_deploy_config.py"
+        build_mmdeploy_config(self.imsize, self.cache_path)
+        create_input_image(self.loaders["test"], self.cache_path)
+        deploy_cfg_path = f"{self.cache_path}/current_openvino_deploy_config.py"
         quant_cfg_path = f"{self.cache_path}/current_quant_config.py"
         demo_img_path = f"{self.cache_path}/demo_image.png"
         os.system(

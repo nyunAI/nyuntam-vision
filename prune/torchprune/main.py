@@ -1,24 +1,18 @@
 import torch
-import torchvision
 import torch_pruning as tp
-import numpy as np
-import os
 import wandb
-from datetime import datetime
 import logging
-import sys
 import time
 import timm
 from transformers.models.vit.modeling_vit import ViTSelfAttention, ViTSelfOutput
 from .torchprune_utils import replace_c2f_with_c2f_v2, train_v2, forward_timm_vit
-from copy import deepcopy
 from trailmet.utils import AverageMeter, accuracy
 
-sys.path.append(os.path.abspath(os.path.join("...", "core")))
-from core.finetune import train
+from vision.core.finetune import train
+from nyuntam.algorithm import VisionAlgorithm
 
 
-class TorchPrune:
+class TorchPrune(VisionAlgorithm):
     def __init__(self, model, loaders, **kwargs):
         self.kwargs = kwargs
         self.wandb = kwargs.get("wandb", True)

@@ -1,7 +1,4 @@
-#from .ptq import TensorRT
+from .ptq import TensorRTClassification, TensorRTObjectDetection
 from .qat import TensorRTQAT
 
-__all__ = [
-    "TensorRTQAT",
-    "TensorRT",
-]
+__all__ = ["TensorRTQAT", "TensorRTClassification", "TensorRTObjectDetection"]

@@ -13,10 +13,11 @@ import torch
 import onnx
 import sys
 import os
-from core.finetune import train
+from vision.core.finetune import train
+from nyuntam.algorithm import VisionAlgorithm
 
 
-class ONNXQuant:
+class ONNXQuant(VisionAlgorithm):
     def __init__(self, model, loaders=None, **kwargs):
         self.kwargs = kwargs
         self.model = model

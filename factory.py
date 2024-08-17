@@ -49,7 +49,6 @@ class CompressionFactory(BaseFactory):
         os.makedirs(self.kwargs.get("DATA_PATH"), exist_ok=True)
         os.makedirs(self.kwargs.get("LOGGING_PATH"), exist_ok=True)
         self.set_logger(self.kwargs.get("LOGGING_PATH"))
-
         loaded_algorithm = self.get_algorithm(algorithm)
         kw = {}
         for k in kwargs.keys():

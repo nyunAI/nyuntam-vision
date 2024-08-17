@@ -1,8 +1,10 @@
 import logging
 import wandb
+from nyuntam.algorithm import VisionAlgorithm
+from abc import abstractmethod
 
 
-class NNCFQAT:
+class NNCFQAT(VisionAlgorithm):
     def __init__(self, model, loaders=None, **kwargs):
         self.kwargs = kwargs
         self.model = model
@@ -25,5 +27,6 @@ class NNCFQAT:
         self.qat = kwargs.get("QAT", False)
         self.platform = kwargs.get("PLATFORM", "mmdet")
 
+    @abstractmethod
     def compress_model(self):
         pass

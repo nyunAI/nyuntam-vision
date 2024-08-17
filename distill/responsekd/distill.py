@@ -18,6 +18,7 @@ class Distillation(BaseAlgorithm):
 
         pass
 
+
 def check_if_wrapped(model):
     return isinstance(model, (DataParallel, DistributedDataParallel))
 

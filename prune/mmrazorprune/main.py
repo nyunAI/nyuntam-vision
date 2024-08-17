@@ -8,9 +8,10 @@ from glob import glob
 import logging
 import torch
 from mmengine.runner import Runner
+from nyuntam.algorithm import VisionAlgorithm
 
 
-class MMrazorPrune:
+class MMrazorPrune(VisionAlgorithm):
     def __init__(self, model, loaders=None, **kwargs):
         self.kwargs = kwargs
         self.model = model

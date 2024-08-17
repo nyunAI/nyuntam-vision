@@ -15,7 +15,7 @@ import wandb
 import numpy as np
 import os
 import time
-
+from nyuntam.algorithm import VisionAlgorithm
 from trailmet.utils import AverageMeter, accuracy, save_checkpoint, seed_everything
 
 
@@ -23,7 +23,7 @@ from trailmet.utils import AverageMeter, accuracy, save_checkpoint, seed_everyth
 seed_everything(43)
 
 
-class KDTransfer(Distillation):
+class KDTransfer(Distillation, VisionAlgorithm):
     """Class to compress model using distillation via KD transfer.
 
     Parameters

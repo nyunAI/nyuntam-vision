@@ -48,7 +48,7 @@ class TensorRTQAT:
         self.logger = logging.getLogger(__name__)
         self.logger.info(f"Experiment Arguments: {self.kwargs}")
         self.job_id = kwargs.get("JOB_ID", "1")
-        self.fake_quantize_step = kwargs.get("FAKE_QUANTIZED_STEP",True)
+        self.fake_quantize_step = kwargs.get("FAKE_QUANTIZED_STEP", True)
         if self.wandb:
             wandb.init(project="Kompress Tensorrt QAT", name=str(self.job_id))
             wandb.config.update(self.kwargs)
@@ -76,7 +76,7 @@ class TensorRTQAT:
             self.max_box,
             self.pre_top_k,
             self.keep_top_k,
-            self.cache_path
+            self.cache_path,
         )
         config = build_quantization_config(
             self.ckpt_path,
@@ -90,7 +90,9 @@ class TensorRTQAT:
             self.factor,
             self.weight_decay,
         )
-        customize_config(config, self.data_path, self.model_path, self.batch_size,self.cache_path)
+        customize_config(
+            config, self.data_path, self.model_path, self.batch_size, self.cache_path
+        )
         quant_config_path = f"{self.cache_path}/current_quant_final.py"
 
         if self.fake_quantize_step == True:
@@ -119,10 +121,14 @@ class TensorRTQAT:
                 self.logger.info(f"Fake Quantized Path is None")
                 raise Exception("Fake Quantized Path is None")
             elif not os.path.exists(self.quantized_pth_location):
-                self.logger.info(f"Fake Quantized Path is Not Present at {self.quantized_pth_location}")
-                raise Exception(f"Fake Quantized Path is Not Present at {self.quantized_pth_location}")               
-            build_mmdeploy_config(self.imsize,self.cache_path)
-            create_input_image(self.loaders["test"],self.cache_path)
+                self.logger.info(
+                    f"Fake Quantized Path is Not Present at {self.quantized_pth_location}"
+                )
+                raise Exception(
+                    f"Fake Quantized Path is Not Present at {self.quantized_pth_location}"
+                )
+            build_mmdeploy_config(self.imsize, self.cache_path)
+            create_input_image(self.loaders["test"], self.cache_path)
             deploy_config_path = f"{self.cache_path}/current_tensorrt_deploy_config.py"
             demo_image_path = f"{self.cache_path}/demo_image.png"
             os.system(

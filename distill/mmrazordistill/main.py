@@ -7,9 +7,9 @@ from mmengine.runner import Runner
 from .utils import *
 from vision.core.utils.modelutils import download_mim_config
 from abc import ABC, abstractmethod
+from nyuntam.algorithm import VisionAlgorithm
 
-
-class MMRazorDistill(ABC):
+class MMRazorDistill(VisionAlgorithm):
     def __init__(self, teacher_model, model, loaders=None, **kwargs):
         self.kwargs = kwargs
         self.model = model
