@@ -3,7 +3,7 @@ ALGORITHM: NNCFQAT
 ALGO_TYPE: quant
 BATCH_SIZE: 16
 DATA_URL: ''
-DATASET_NAME: COCODETECTION # incase of autogptq ["wikitext2", "c4", "c4-new", "ptb", "ptb-new"]
+DATASET_NAME: COCODETECTION
 MODEL: yolox_s_8xb8-300e_coco
 NUM_CLASSES: 10
 CACHE_PATH: 'abc/.cache'

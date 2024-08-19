@@ -1,0 +1,36 @@
+ALGORITHM: MMRazorPrune
+ALGO_TYPE: prune
+BATCH_SIZE: 32
+DATA_URL: ''
+DATASET_NAME: COCODETECTION
+MODEL: yolox_tiny_fast_8xb8-300e_coco
+NUM_CLASSES: 2
+DATA_PATH: data/face/
+LOGGING_PATH: logs/ 
+PIN_MEM: false
+PRETRAINED: false
+CACHE_PATH: 'ABC/.cache/new'
+PLATFORM: mmyolo
+TASK: object_detection
+WORKERS: 0
+insize: 640
+CUSTOM_MODEL_PATH: 'yolox_distilled'
+MODEL_PATH: 'ABC/jobs/1'
+JOB_PATH: 'ABC/jobs/1'
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+prune:
+FINETUNE_EPOCHS: 1
+USER_FOLDER: 'abc'
+TRAINING: False
+VALIDATION: False
+prune:
+  MMRazor:
+    INTERVAL: 1
+    NORM_TYPE: 'act'
+    LR_RATIO: 0.1
+    TARGET_FLOP_RATIO: 0.9
+    EPOCHS: 1
+    PRUNE_EPOCS: 50
