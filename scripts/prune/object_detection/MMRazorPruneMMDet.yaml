@@ -1,0 +1,37 @@
+
+ALGORITHM: MMRazorPrune
+JOB_SERVICE: Kompress
+ALGO_TYPE: prune
+BATCH_SIZE: 1
+DATA_URL: ''
+DATASET_NAME: COCODETECTION 
+MODEL: retinanet_r50_fpn_1x_coco
+NUM_CLASSES: 10
+DATA_PATH: data/
+LOGGING_PATH: logs/ 
+PIN_MEM: false
+PRETRAINED: false
+CACHE_PATH: 'model_cache'
+PLATFORM: mmdet
+TASK: object_detection
+WORKERS: 0
+insize: 32
+CUSTOM_MODEL_PATH: 'ABC/models'
+MODEL_PATH: 'ABC/jobs/1'
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+prune:
+USER_FOLDER: 'abc'
+TRAINING: False
+VALIDATION: False
+prune:
+  MMRazor:
+    INTERVAL: 10
+    NORM_TYPE: 'act'
+    LR_RATIO: 0.1
+    TARGET_FLOP_RATIO: 0.5
+    EPOCHS: 1
+      
+

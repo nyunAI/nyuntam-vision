@@ -1,0 +1,31 @@
+ALGORITHM: MMRazorDistill
+JOB_SERVICE: Kompress
+ALGO_TYPE: distill
+BATCH_SIZE: 16
+DATA_URL: ''
+DATASET_NAME: COCODETECTION 
+MODEL: yolox_tiny_fast_8xb8-300e_coco
+NUM_CLASSES: 2
+DATA_PATH: data/face
+LOGGING_PATH: logs/ 
+PIN_MEM: false
+PRETRAINED: false
+CACHE_PATH: 'model_cache'
+PLATFORM: mmyolo
+TASK: object_detection
+WORKERS: 0
+insize: 640
+CUSTOM_MODEL_PATH: ''
+MODEL_PATH: 'ABC/jobs/1'
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+USER_FOLDER: 'abc'
+TRAINING: False
+VALIDATION: False
+distill:
+    MMRazorDistill:
+        TEACHER_MODEL: yolox_s_fast_8xb8-300e_coco
+        METHOD: pkd_yolo #[cwd,pkd]
+        CUSTOM_TEACHER_PATH: '/workspace/work_yolo_dirs/yolox_s_fast_8xb8-300e_coco/best_coco_bbox_mAP_epoch_292.pth'

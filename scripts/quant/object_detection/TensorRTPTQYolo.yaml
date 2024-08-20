@@ -1,0 +1,43 @@
+JOB__SERVICE: Kompress
+ALGORITHM: TensorRT
+ALGO_TYPE: quant
+BATCH_SIZE: 32
+DATA_URL: ''
+DATASET_NAME: COCODETECTION
+MODEL: rtmdet_s_syncbn_fast_8xb32-300e_coco
+NUM_CLASSES: 10
+CACHE_PATH: 'abc/.cache'
+JOB_ID: 1
+JOB_PATH: 'abc/jobs/1'
+DATA_PATH: 'data'
+LOGGING_PATH: 'abc/logs' 
+MODEL_PATH: 'abc/models'
+PIN_MEM: false
+PRETRAINED: false
+PLATFORM: mmyolo
+TASK: object_detection
+WORKERS: 0
+insize: 640
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+TRAINING: FALSE
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "Adam"
+LEARNING_RATE: 0.001
+FINETUNE_EPOCHS: 0
+VALIDATE: FALSE
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'abc'
+MAX_BBOX_PER_IMG: 100
+MAX_BBOX_PER_CLS: 100
+NMS_PRE: 1000
+MIN_BBOX_SIZE: 0
+IOU: 0.65
+SCORE_THRESHOLD: 0.03
+CONFIDENCE_THRESHOLD: 0.005
+quant:
+    TensorRT:
+      onnx_file_path: "onnx_models/trt_trial.onnx"
+      tensorrt_file_path: "tensorrt_models/trt_trial.trt"

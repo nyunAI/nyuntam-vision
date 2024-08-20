@@ -1,0 +1,47 @@
+JOB_SERVICE: Kompress
+ALGORITHM: NNCF
+ALGO_TYPE: quant
+BATCH_SIZE: 32
+DATA_URL: ''
+DATASET_NAME: COCODETECTION
+MODEL: yolox_tiny_8xb8-300e_coco
+NUM_CLASSES: 10
+CACHE_PATH: 'abc/.cache/quantization'
+JOB_ID: 15
+JOB_PATH: 'abc/jobs/30'
+DATA_PATH: 'abc/dataset/2/face'
+PIN_MEM: false
+PRETRAINED: false
+PLATFORM: mmdet
+TASK: object_detection
+WORKERS: 0
+insize: 640
+wandb: False 
+VERSION: original
+VERBOSE: True
+DEVICE: 'cuda:0'
+TRAINING: False
+CRITERION: "CrossEntropyLoss"
+OPTIMIZER: "Adam"
+LEARNING_RATE: 0.001
+FINETUNE_EPOCHS: 1
+VALIDATE: True
+VALIDATION_INTERVAL: 1
+USER_FOLDER: 'abc'
+LOGGING_PATH: 'abc/logs' 
+CUSTOM_MODEL_PATH: 'yolox-tiny-weight-trained'
+MODEL_PATH: 'abc/jobs/30'
+MAX_BBOX_PER_IMG: 100
+MAX_BBOX_PER_CLS: 100
+NMS_PRE: 1000
+MIN_BBOX_SIZE: 0
+IOU: 0.65
+SCORE_THRESHOLD: 0.03
+CONFIDENCE_THRESHOLD: 0.005
+USE_DEFAULT_POST_PROCESSING: True
+quant:
+    NNCF:
+        TRANSFORMER: FALSE
+        
+        
+ 
