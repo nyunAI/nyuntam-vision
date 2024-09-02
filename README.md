@@ -171,8 +171,6 @@ Custom weights can be added to `{USER_FOLDER}/models` and named `wds.pt` or `wds
 
 For complete documentation of nyuntam-vision, visit [nyun docs](https://github.com/nyun-docs).
 
-Here is the formatted section for the acknowledgments and citations:
-
 ## Acknowledgments and Citations
 
 This repository utilizes various state-of-the-art methods and algorithms developed by the research community. We acknowledge the following works that have contributed to the development and performance of the Nyuntam suite:
