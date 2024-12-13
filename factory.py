@@ -33,7 +33,7 @@ class CompressionFactory(BaseFactory):
         algo_type = self.kwargs.get("ALGO_TYPE", "prune")
         task = self.kwargs.get("TASK", "image_classification")
         module = importlib.import_module(f"vision.{algo_type}")
-        loaded_algorithm = getattr(module, "initialize_initialization")(name, task)
+        loaded_algorithm = getattr(module, "initialize_initialization")(name)
         return loaded_algorithm
 
     def __init__(self, kwargs):
